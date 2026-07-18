@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Maestro | RP Guitar Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0b0b0b; color: white; margin: 0; padding: 20px; overflow-x: hidden; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+        .admin-container { max-width: 800px; margin: 0 auto; background: #161616; padding: 30px; border-radius: 8px; position: relative; z-index: 10; }
+        .logo-admin { width: 150px; display: block; margin: 0 auto 20px auto; filter: brightness(0) invert(1); }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; background: #222; border: none; color: white; cursor: pointer; border-radius: 4px; }
+        .tab-btn.active { background: #c5a880; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; box-sizing: border-box; }
+        button { padding: 15px; background: #c5a880; border: none; cursor: pointer; font-weight: 600; width: 100%; }
+        .inventory-item { display: flex; gap: 15px; align-items: center; padding: 15px; border-bottom: 1px solid #333; }
+        #search-bar { border: 1px solid #c5a880; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <img src="rplogo.png" alt="RP Guitar Store" class="logo-admin">
+    <h1 id="form-title" style="text-align: center;">Panel de Gestión Total</h1>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('subir')">Subir Producto</button>
+        <button class="tab-btn" onclick="showTab('inventario')">Inventario</button>
+    </div>
+
+    <div id="subir" class="tab-content active">
+        <input type="hidden" id="edit-id">
+        <input type="text" id="name" placeholder="Nombre">
+        <input type="text" id="price" placeholder="Precio (Q)">
+        <input type="number" id="stock" placeholder="Cantidad en stock">
+        
+        <label>Categoría / Marca:</label>
+        <select id="categoria" onchange="checkOther(this.value)">
+            <option value="otra">-- Otra Marca (Escribir manualmente) --</option>
+        </select>
+
+        <input type="text" id="nueva-categoria" placeholder="Escribe el nombre de la nueva marca..." style="display: none;">
+
+        <label id="label-grupo" style="display:none;">Grupo (¿Dónde clasificar esta marca?):</label>
+<select id="nuevo-grupo" style="display:none;">
+    <option value="Guitarras Eléctricas">Guitarras Eléctricas</option>
+    <option value="Guitarras Acústicas">Guitarras Acústicas</option>
+    <option value="Electro Acústicas">Electro Acústicas</option>
+    <option value="Ukeleles">Ukeleles</option>
+    <option value="Amplificadores">Amplificadores</option>
+    <option value="Pedales">Pedales</option>
+    <option value="Accesorios">Accesorios</option>
+    <option value="Lauten Audio">Lauten Audio</option>
+</select>
+        
+        <textarea id="desc" rows="3" placeholder="Descripción"></textarea>
+        <input type="file" id="fileInput">
+        <button id="save-btn">Subir a la Tienda</button>
+        <button id="cancel-edit" style="display:none; background:#800; margin-top:10px;">Cancelar Edición</button>
+    </div>
+
+    <div id="inventario" class="tab-content">
+        <input type="text" id="search-bar" placeholder="Buscar..." onkeyup="filterInventory()">
+        <div id="inventory-list"></div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyC7W3ekV5oP1rX6kdJoZQJGry3w2XlhDHA", authDomain: "rpguitarstore-fa879.firebaseapp.com", projectId: "rpguitarstore-fa879", storageBucket: "rpguitarstore-fa879.firebasestorage.app", messagingSenderId: "580505435322", appId: "1:580505435322:web:122d4c01344606c1fe5683" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    async function cargarCategoriasAdmin() {
+        const select = document.getElementById('categoria');
+        const snapshot = await getDocs(collection(db, "productos"));
+        const categorias = new Set();
+        snapshot.forEach(doc => { if(doc.data().categoria) categorias.add(doc.data().categoria); });
+        categorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.text = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+            select.add(option);
+        });
+    }
+    cargarCategoriasAdmin();
+
+    window.showTab = (tabId) => {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    };
+
+    window.filterInventory = () => {
+        const val = document.getElementById('search-bar').value.toLowerCase();
+        document.querySelectorAll('.inventory-item').forEach(item => {
+            item.style.display = item.innerText.toLowerCase().includes(val) ? 'flex' : 'none';
+        });
+    };
+
+    window.checkOther = (val) => {
+        const inputMarca = document.getElementById('nueva-categoria');
+        const labelGrupo = document.getElementById('label-grupo');
+        const selectGrupo = document.getElementById('nuevo-grupo');
+        
+        if (val === 'otra') {
+            inputMarca.style.display = 'block';
+            if(labelGrupo) labelGrupo.style.display = 'block';
+            if(selectGrupo) selectGrupo.style.display = 'block';
+        } else {
+            inputMarca.style.display = 'none';
+            if(labelGrupo) labelGrupo.style.display = 'none';
+            if(selectGrupo) selectGrupo.style.display = 'none';
+        }
+    };
+
+    document.getElementById('save-btn').onclick = async () => {
+        const id = document.getElementById('edit-id').value;
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const stock = document.getElementById('stock').value;
+        const desc = document.getElementById('desc').value;
+        
+        const select = document.getElementById('categoria');
+        const inputManual = document.getElementById('nueva-categoria');
+        const grupoSelector = document.getElementById('nuevo-grupo');
+        
+        const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
+        const grupo = grupoSelector.value;
+
+        if (id) {
+            await updateDoc(doc(db, "productos", id), { name, price, stock, categoria, grupo, desc });
+            Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+        } else {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return Swal.fire("Error", "Elige una imagen", "error");
+            Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
+            await uploadBytes(storageRef, file);
+            const image = await getDownloadURL(storageRef);
+            await addDoc(collection(db, "productos"), { name, price, stock, categoria, grupo, desc, image, timestamp: Date.now() });
+            Swal.fire({ icon: 'success', title: 'Producto subido', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+        }
+        location.reload();
+    };
+
+    const list = document.getElementById('inventory-list');
+    const snapshot = await getDocs(collection(db, "productos"));
+    snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'inventory-item';
+        itemDiv.innerHTML = `<img src="${data.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
+            <div style="flex-grow: 1;">
+                <div style="display: flex; justify-content: space-between;"><strong>${data.name}</strong>
+                    <div>
+                        <i class="fas fa-pencil-alt" id="edit-${docSnap.id}" style="cursor: pointer; color: #c5a880; margin-right: 15px;"></i>
+                        <i class="fas fa-times" id="del-${docSnap.id}" style="cursor: pointer; color: #800;"></i>
+                    </div>
+                </div>
+                <div style="font-size: 0.85em; color: #888;">Cat: ${data.categoria} | Gp: ${data.grupo || 'N/A'} | Q${data.price}</div>
+            </div>`;
+        list.appendChild(itemDiv);
+
+        itemDiv.querySelector(`#edit-${docSnap.id}`).onclick = () => {
+            document.getElementById('edit-id').value = docSnap.id;
+            document.getElementById('name').value = data.name;
+            document.getElementById('price').value = data.price;
+            document.getElementById('stock').value = data.stock || 0;
+            document.getElementById('categoria').value = data.categoria;
+            document.getElementById('desc').value = data.desc;
+            document.getElementById('save-btn').innerText = "Actualizar Producto";
+            document.getElementById('cancel-edit').style.display = "block";
+            window.showTab('subir');
+
+            // Añade estas líneas dentro del evento click del botón editar:
+document.getElementById('nuevo-grupo').value = data.grupo; // Precarga el grupo
+document.getElementById('nuevo-grupo').style.display = 'block'; // Asegura que se vea
+document.getElementById('label-grupo').style.display = 'block'; // Asegura que su etiqueta se vea
+        };
+
+        itemDiv.querySelector(`#del-${docSnap.id}`).onclick = async () => {
+            const res = await Swal.fire({ title: '¿Eliminar producto?', text: "Esta acción no se puede deshacer.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#800' });
+            if (res.isConfirmed) { await deleteDoc(doc(db, 'productos', docSnap.id)); location.reload(); }
+        };
+    });
+
+    document.getElementById('cancel-edit').onclick = () => { location.reload(); };
+</script>
+</body>
+</html>

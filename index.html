@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RP Guitar Store | musica | el t</title>
+    <!-- Fuentes de Lujo Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos de Redes Sociales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* RESET & BASE DE LUJO SILENCIOSO */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0b0b0b; /* Fondo oscuro premium base */
+            /* Degradado radial que otorga una iluminación central y profundidad en los bordes */
+            background-image: radial-gradient(circle at 50% 30%, #161616 0%, #060606 70%);
+            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* CAPA DE RUIDO TEXTURIZADO Y PROFUNDIDAD COHESIVA */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Textura matemática de grano de alta fidelidad */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999; /* Cubre toda la interfaz de forma sutil */
+        }
+
+        /* Encabezado Principal Premium */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 60px;
+            background-color: rgba(11, 11, 11, 0.85);
+            backdrop-filter: blur(15px); /* Efecto cristal pulido translúcido */
+            -webkit-backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Contenedor del Logo Izquierdo */
+        .logo-area img {
+            height: 90px;
+            width: auto;
+            filter: brightness(0) invert(1); /* Adaptación a blanco para fondo oscuro */
+            transition: opacity 0.3s ease;
+        }
+        .logo-area img:hover {
+            opacity: 0.8;
+        }
+
+        /* Contenedor de Redes + Menú Derecho */
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        /* Redes Sociales */
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+        .social-icons a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #c5a880; /* Dorado Champagne */
+        }
+
+        /* Menú de Navegación Galería */
+        nav {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+        nav a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            color: #c5a880; 
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: #c5a880;
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        /* Contenido Central Elegante */
+        .main-content {
+            max-width: 1100px; 
+            margin: 100px auto;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Título Principal Editorial */
+        .main-content h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 64px;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+            color: #ffffff;
+            text-transform: capitalize;
+        }
+
+        /* Subtítulos */
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.8;
+            margin-bottom: 80px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        .highlight-text {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #c5a880;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        /* CARRETE DE FOTOS INFINITO */
+        .photo-carousel-section {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            overflow: hidden;
+            margin-top: 60px;
+            margin-bottom: 100px;
+            padding: 20px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            width: calc(300px * 30);
+            animation: scrollInfinito 55s linear infinite;
+            gap: 15px;
+        }
+
+        .carousel-item {
+            width: 300px;
+            height: 200px;
+            flex-shrink: 0;
+            border-radius: 0px; /* Estética arquitectónica de bordes limpios */
+            overflow: hidden;
+            filter: grayscale(20%) brightness(0.85);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.04) translateY(-5px);
+            filter: grayscale(0%) brightness(1);
+            cursor: pointer;
+        }
+
+        @keyframes scrollInfinito {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-315px * 15)); }
+        }
+
+        /* SECCIÓN DE MARCAS PRESTIGE */
+        .brands-section {
+            margin-top: 80px;
+            padding-bottom: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 80px;
+        }
+        
+        .brands-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 45px;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            letter-spacing: 5px;
+            color: #c5a880;
+        }
+
+        /* Cuadrícula optimizada: Más grandes y menor espacio */
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 10px; /* Reducido espacio entre ellos para compactar la cuadrícula */
+            align-items: center;
+            justify-items: center;
+            margin-top: 50px;
+        }
+
+        /* Configuración de logos premium con mayor escala visual */
+        .brands-grid img {
+            width: 100%;
+            max-width: 210px; /* Incrementado el tamaño de los logos */
+            height: auto;
+            display: block;
+            filter: brightness(0) invert(1); /* Cohesión estética luxury */
+            opacity: 0.45;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .brands-grid img:hover {
+            transform: scale(1.06); 
+            opacity: 1; 
+            cursor: pointer;
+        }
+
+        /* SUBPESTAÑAS DROPDOWN (Estilo Boutique Avanzado) */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(15px);
+            position: absolute;
+            background-color: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(10px);
+            min-width: 240px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 110;
+            top: 100%; 
+            left: 50%;
+            padding: 15px 0;
+            text-align: left;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dropdown-content::-webkit-scrollbar {
+            width: 3px;
+        }
+        .dropdown-content::-webkit-scrollbar-thumb {
+            background-color: #c5a880;
+        }
+
+        .dropdown-content a {
+            color: rgba(255, 255, 255, 0.55);
+            padding: 11px 25px;
+            text-decoration: none;
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-content a::after {
+            display: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(197, 168, 128, 0.06);
+            color: #c5a880; 
+            padding-left: 32px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .dropdown .fa-chevron-down {
+            transition: transform 0.3s ease;
+            font-size: 8px !important;
+            opacity: 0.4;
+        }
+        .dropdown:hover .fa-chevron-down {
+            transform: rotate(180deg);
+            color: #c5a880;
+        }
+
+        /* FOOTER PREMIUM ELEVADO */
+        footer {
+            background-color: #060606; 
+            color: rgba(255, 255, 255, 0.35);
+            padding: 90px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-logo {
+            max-width: 150px; 
+            height: auto;
+            margin: 0 auto 40px auto;
+            display: block;
+            filter: brightness(0) invert(1);
+            opacity: 0.65;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+
+        .footer-logo:hover {
+            transform: rotate(360deg) scale(1.02);
+        }
+
+        footer p {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.8px;
+            margin: 0;
+        }
+
+        /* RESPONSIVO MÓVIL PERFECCIONADO */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding: 25px 10px;
+            }
+            .logo-area img {
+                height: 70px;
+            }
+            .nav-container {
+                align-items: center;
+                width: 100%;
+            }
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px 20px;
+            }
+            nav a {
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+            .main-content h1 {
+                font-size: 36px;
+            }
+            .subtitle {
+                font-size: 14px;
+                margin-bottom: 50px;
+            }
+            /* Cuidado perfecto en móvil: 3 columnas balanceadas y fluidas */
+            .brands-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                padding: 0 10px;
+            }
+            .brands-grid img {
+                max-width: 100%; /* Permite un escalado adaptativo fluido */
+            }
+            .dropdown-content {
+                width: 85vw;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <div class="logo-area">
+            <a href="/">
+                <img src="rplogo.png" alt="RP Guitar Store">
+            </a>
+        </div>
+        
+        <div class="nav-container">
+    <div class="social-icons">
+        <a href="https://www.facebook.com/RpGuitarStore" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/rpguitarstore" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.youtube.com/@RicharPerezGuitar" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@rpguitarstore1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+    </div>
+
+        <nav>
+    <a href="/">Inicio</a>
+    
+    <!-- Menú Guitarras: Ahora apunta a categoria.html -->
+    <div class="dropdown">
+        <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div class="dropdown-content">
+            <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
+            <a href="categoria.html?cat=Guitarras-Acústicas">Acústicas</a>
+            <a href="categoria.html?cat=Electro-Acústicas">Electro Acústicas</a>
+            <a href="categoria.html?cat=Ukeleles">Ukeleles</a>
+        </div>
+    </div>
+
+    <!-- Amplificadores: Apunta a categoria.html -->
+    <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
+
+    <!-- Pedales: Se llena dinámicamente -->
+    <div class="dropdown">
+        <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div id="menu-pedales" class="dropdown-content"></div>
+    </div>
+
+    <!-- Accesorios: Se llena dinámicamente -->
+    <div class="dropdown">
+        <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div id="menu-accesorios" class="dropdown-content"></div>
+    </div>
+
+    <!-- Lauten Audio: Apunta a categoria.html -->
+    <a href="categoria.html?cat=Lauten-Audio">Lauten Audio</a>
+</nav>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <h1>Tienda de guitarras en Guatemala</h1>
+        
+        <p class="subtitle">
+            RP Guitar Store guitarras eléctricas, acústicas, bajos, pedales, amplificadores boutique
+            <span class="highlight-text">El Hogar del Tono</span>
+        </p>
+
+        <!-- CARRETE DE FOTOS INFINITO -->
+        <section class="photo-carousel-section">
+            <div class="carousel-track">
+                <div class="carousel-item"><img src="fotos/IMG_1917.JPG" alt="RP Foto 1"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1918.JPG" alt="RP Foto 2"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1919.JPG" alt="RP Foto 3"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1920.JPG" alt="RP Foto 4"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1921.JPG" alt="RP Foto 5"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1922.JPG" alt="RP Foto 6"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1923.JPG" alt="RP Foto 7"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1924.JPG" alt="RP Foto 8"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1925.JPG" alt="RP Foto 9"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1926.JPG" alt="RP Foto 10"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1927.JPG" alt="RP Foto 11"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1928.JPG" alt="RP Foto 12"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1929.JPG" alt="RP Foto 13"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1930.JPG" alt="RP Foto 14"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1931.JPG" alt="RP Foto 15"></div>
+
+                <!-- Loop -->
+                <div class="carousel-item"><img src="fotos/IMG_1917.JPG" alt="RP Foto 1"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1918.JPG" alt="RP Foto 2"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1919.JPG" alt="RP Foto 3"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1920.JPG" alt="RP Foto 4"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1921.JPG" alt="RP Foto 5"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1922.JPG" alt="RP Foto 6"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1923.JPG" alt="RP Foto 7"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1924.JPG" alt="RP Foto 8"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1925.JPG" alt="RP Foto 9"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1926.JPG" alt="RP Foto 10"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1927.JPG" alt="RP Foto 11"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1928.JPG" alt="RP Foto 12"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1929.JPG" alt="RP Foto 13"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1930.JPG" alt="RP Foto 14"></div>
+                <div class="carousel-item"><img src="fotos/IMG_1931.JPG" alt="RP Foto 15"></div>
+            </div>
+        </section>
+
+        <!-- Sección de Marcas Totalmente Actualizada -->
+       <section class="brands-section">
+    <h2 style="margin-bottom: 5px;">MARCAS</h2>
+    <p style="font-family: 'Inter', sans-serif; font-size:30px; color: #fcfbfb; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; opacity: 100; font-weight: 300;">
+        DISTRIBUIDOR OFICIAL DE:
+    </p>
+            
+            <div class="brands-grid">
+                <img src="marcas/amt.png" alt="AMT">
+                <img src="marcas/barber.png" alt="Barber">
+                <img src="marcas/browne.png" alt="Browne">
+                <img src="marcas/citizen.png" alt="Citizen">
+                <img src="marcas/cort.png" alt="Cort">
+                <img src="marcas/danelectro.png" alt="Danelectro">
+                <img src="marcas/dangelico.png" alt="D'Angelico">
+                <img src="marcas/drj.png" alt="Dr.J">
+                <img src="marcas/eastwood.png" alt="Eastwood">
+                <img src="marcas/electrohar.png" alt="Electro-Harmonix">
+                <img src="marcas/ernie.png" alt="Ernie Ball">
+                <img src="marcas/gyl.png" alt="G&L">
+                <img src="marcas/lm.png" alt="LM">
+                <img src="marcas/maxon.png" alt="Maxon">
+                <img src="marcas/mcg.png" alt="MCG Pedals">
+                <img src="marcas/mooer.png" alt="Mooer">
+                <img src="marcas/nobels.png" alt="Nobels">
+                <img src="marcas/nux.png" alt="Nux">
+                <img src="marcas/origin.png" alt="Origin Effects">
+                <img src="marcas/pigtronix.png" alt="Pigtronix">
+                <img src="marcas/powerall.png" alt="Power-All">
+                <img src="marcas/rivolta.png" alt="Rivolta">
+                <img src="marcas/rjm.png" alt="RJM">
+                <img src="marcas/ryra.png" alt="Ryra">
+                <img src="marcas/suhr.png" alt="Suhr">
+                <img src="marcas/supro.png" alt="Supro">
+                <img src="marcas/vega.png" alt="VegaTrem">
+                <img src="marcas/vemuram.png" alt="Vemuram">
+                <img src="marcas/vertex.png" alt="Vertex">
+                <img src="marcas/walrus.png" alt="Walrus Audio">
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <img class="footer-logo" src="rplogo.png" alt="RP Guitar Store Logo">
+        <p>&copy; 2022 by RP Guitar Store. Proudly created by Antony de León</p>
+    </footer>
+
+
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = { 
+    apiKey: "AIzaSyC7W3ekV5oP1rX6kdJoZQJGry3w2XlhDHA", 
+    authDomain: "rpguitarstore-fa879.firebaseapp.com", 
+    projectId: "rpguitarstore-fa879", 
+    storageBucket: "rpguitarstore-fa879.firebasestorage.app", 
+    messagingSenderId: "580505435322", 
+    appId: "1:580505435322:web:122d4c01344606c1fe5683" 
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+    
+
+    async function cargarMenuAutomatico() {
+        try {
+            const snapshot = await getDocs(collection(db, "productos"));
+            const pedalesDiv = document.getElementById('menu-pedales');
+            const accsDiv = document.getElementById('menu-accesorios');
+            
+            const listaPedales = new Set();
+            const listaAccesorios = new Set();
+
+            snapshot.forEach(doc => {
+    const p = doc.data();
+    
+    // CAMBIO AQUÍ: Cambiamos 'p.marca' por 'p.categoria'
+    if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
+    if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
+});
+
+// Y ajusta también la generación de botones para que el link use la categoría:
+listaPedales.forEach(cat => {
+    pedalesDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
+});
+listaAccesorios.forEach(cat => {
+    accsDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
+});
+        } catch (error) {
+            console.error("Error cargando el menú:", error);
+        }
+    }
+    cargarMenuAutomatico();
+</script>
+</body>
+</html>
