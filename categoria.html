@@ -55,6 +55,68 @@
         .price { color: #c5a880; font-weight: 600; display: block; margin-top: 15px; }
         footer { background-color: #060606; color: rgba(255, 255, 255, 0.35); padding: 90px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.02); position: relative; z-index: 10; margin-top: 100px; }
         .footer-logo { max-width: 150px; margin: 0 auto 40px auto; display: block; filter: brightness(0) invert(1); opacity: 0.65; }
+
+        /* Ajustes de responsividad para móviles */
+        @media (max-width: 1024px) {
+            #product-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+      @media (max-width: 768px) {
+    /* 1. Encabezado y navegación */
+    header {
+        flex-direction: column !important;
+        padding: 15px !important;
+        height: auto !important;
+    }
+    .nav-container {
+        align-items: center !important;
+        width: 100% !important;
+        margin-top: 15px !important;
+    }
+    nav {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+    #search-bar {
+        width: 90% !important;
+    }
+
+    /* 2. Grid de productos (Consolidado a 2 columnas) */
+#product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        align-items: stretch !important; /* IMPORTANTE: Hace que las cards de la fila tengan la misma altura */
+    }
+
+    .product-card {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important; /* Fuerza a la card a ocupar todo el espacio vertical de la fila */
+        padding: 10px !important;
+    }
+
+    .product-card p {
+        flex-grow: 1 !important; /* La descripción ocupa el espacio variable */
+        margin-bottom: 10px !important;
+        text-align: justify !important;
+    }
+
+    .price {
+        margin-top: auto !important; /* Empuja el precio al fondo de la card */
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        display: block !important;
+    } 
+
+    .product-card h3 {
+        font-size: 14px !important;
+    }
+}
+        @media (max-width: 480px) {
+            #product-grid { grid-template-columns: 1fr; }
+            .content-area { padding: 0 20px; margin: 40px auto; }
+        }
     </style>
 </head>
 <body>
@@ -66,6 +128,14 @@
         </a>
     </div>
     
+   <div class="nav-container">
+    <div class="social-icons">
+        <a href="https://www.facebook.com/RpGuitarStore" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/rpguitarstore" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.youtube.com/@RicharPerezGuitar" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@rpguitarstore1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+    </div>
+
     <div class="nav-container">
         <nav>
             <a href="index.html">Inicio</a>
