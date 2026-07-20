@@ -466,20 +466,24 @@
                 align-items: center;
             }
             /* Ajuste táctil para los dropdowns en móvil */
-            .dropdown-content {
-                position: static;
-                transform: none;
-                opacity: 1;
-                visibility: visible;
-                display: none;
-                background: rgba(255,255,255,0.02);
-                border: none;
-                box-shadow: none;
-                max-height: 200px;
-                margin-top: 10px;
+          .dropdown-content {
+                position: static !important;
+                transform: none !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: none !important;
+                background-color: #121212 !important; /* Fondo sólido para que no se transparente */
+                border: 1px solid rgba(197, 168, 128, 0.2) !important;
+                border-radius: 6px !important;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+                max-height: 220px !important;
+                overflow-y: auto !important;
+                margin: 12px 0 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
             }
             .dropdown.active .dropdown-content {
-                display: block;
+                display: block !important;
             }
             .main-content h1 {
                 font-size: 36px;
@@ -755,10 +759,21 @@
         }
 
         function toggleDropdown(element) {
-            if (window.innerWidth <= 768) {
-                element.classList.toggle('active');
-            }
+        if (window.innerWidth <= 768) {
+            // Buscamos todos los menús desplegables dentro de la navegación móvil
+            const allDropdowns = document.querySelectorAll('.dropdown');
+            
+            // Recorremos cada uno y cerramos los demás que no sean el que acabamos de presionar
+            allDropdowns.forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Alternamos el estado del elemento actual (si estaba abierto se cierra, si estaba cerrado se abre)
+            element.classList.toggle('active');
         }
+    }
     </script>
 </body>
 </html>
