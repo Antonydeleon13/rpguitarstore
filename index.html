@@ -20,8 +20,7 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #0b0b0b; /* Fondo oscuro premium base */
-            /* Degradado radial que otorga una iluminación central y profundidad en los bordes */
+            background-color: #0b0b0b;
             background-image: radial-gradient(circle at 50% 30%, #161616 0%, #060606 70%);
             color: #ffffff;
             -webkit-font-smoothing: antialiased;
@@ -29,7 +28,6 @@
             position: relative;
         }
 
-        /* CAPA DE RUIDO TEXTURIZADO Y PROFUNDIDAD COHESIVA */
         body::before {
             content: "";
             position: fixed;
@@ -37,10 +35,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            /* Textura matemática de grano de alta fidelidad */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
             pointer-events: none;
-            z-index: 9999; /* Cubre toda la interfaz de forma sutil */
+            z-index: 9999;
         }
 
         /* Encabezado Principal Premium */
@@ -50,7 +47,7 @@
             align-items: center;
             padding: 30px 60px;
             background-color: rgba(11, 11, 11, 0.85);
-            backdrop-filter: blur(15px); /* Efecto cristal pulido translúcido */
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
@@ -58,18 +55,16 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        /* Contenedor del Logo Izquierdo */
         .logo-area img {
             height: 90px;
             width: auto;
-            filter: brightness(0) invert(1); /* Adaptación a blanco para fondo oscuro */
+            filter: brightness(0) invert(1);
             transition: opacity 0.3s ease;
         }
         .logo-area img:hover {
             opacity: 0.8;
         }
 
-        /* Contenedor de Redes + Menú Derecho */
         .nav-container {
             display: flex;
             flex-direction: column;
@@ -77,7 +72,6 @@
             gap: 12px;
         }
 
-        /* Redes Sociales */
         .social-icons {
             display: flex;
             gap: 20px;
@@ -89,10 +83,9 @@
             transition: color 0.3s ease;
         }
         .social-icons a:hover {
-            color: #c5a880; /* Dorado Champagne */
+            color: #c5a880;
         }
 
-        /* Menú de Navegación Galería */
         nav {
             display: flex;
             gap: 35px;
@@ -126,7 +119,17 @@
             width: 100%;
         }
 
-        /* Contenido Central Elegante */
+        /* Botón de Hamburguesa (Oculto en Escritorio) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
         .main-content {
             max-width: 1100px; 
             margin: 100px auto;
@@ -136,7 +139,6 @@
             z-index: 10;
         }
 
-        /* Título Principal Editorial */
         .main-content h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: 64px;
@@ -148,7 +150,6 @@
             text-transform: capitalize;
         }
 
-        /* Subtítulos */
         .subtitle {
             font-size: 16px;
             color: rgba(255, 255, 255, 0.5);
@@ -192,7 +193,6 @@
             width: 300px;
             height: 200px;
             flex-shrink: 0;
-            border-radius: 0px; /* Estética arquitectónica de bordes limpios */
             overflow: hidden;
             filter: grayscale(20%) brightness(0.85);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
@@ -217,7 +217,6 @@
             100% { transform: translateX(calc(-315px * 15)); }
         }
 
-        /* SECCIÓN DE MARCAS PRESTIGE */
         .brands-section {
             margin-top: 80px;
             padding-bottom: 100px;
@@ -235,23 +234,21 @@
             color: #c5a880;
         }
 
-        /* Cuadrícula optimizada: Más grandes y menor espacio */
         .brands-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr); 
-            gap: 10px; /* Reducido espacio entre ellos para compactar la cuadrícula */
+            gap: 10px;
             align-items: center;
             justify-items: center;
             margin-top: 50px;
         }
 
-        /* Configuración de logos premium con mayor escala visual */
         .brands-grid img {
             width: 100%;
-            max-width: 210px; /* Incrementado el tamaño de los logos */
+            max-width: 210px;
             height: auto;
             display: block;
-            filter: brightness(0) invert(1); /* Cohesión estética luxury */
+            filter: brightness(0) invert(1);
             opacity: 0.45;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
@@ -262,7 +259,7 @@
             cursor: pointer;
         }
 
-        /* SUBPESTAÑAS DROPDOWN (Estilo Boutique Avanzado) */
+        /* DROPDOWNS */
         .dropdown {
             position: relative;
         }
@@ -332,7 +329,6 @@
             color: #c5a880;
         }
 
-        /* FOOTER PREMIUM ELEVADO */
         footer {
             background-color: #060606; 
             color: rgba(255, 255, 255, 0.35);
@@ -364,48 +360,141 @@
             margin: 0;
         }
 
-        /* RESPONSIVO MÓVIL PERFECCIONADO */
+        /* BARRA DE BÚSQUEDA GLOBAL */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 50px auto;
+        }
+        #global-search-bar {
+            width: 100%;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(197, 168, 128, 0.3);
+            border-radius: 30px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        #global-search-bar:focus {
+            border-color: #c5a880;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(197, 168, 128, 0.2);
+        }
+        #search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-top: 8px;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 1100;
+            box-shadow: 0px 20px 40px rgba(0,0,0,0.8);
+            display: none;
+            text-align: left;
+        }
+        .search-result-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: background 0.2s;
+        }
+        .search-result-item:hover {
+            background-color: rgba(197, 168, 128, 0.1);
+        }
+        .search-result-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 4px;
+        }
+        .search-result-info h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .search-result-info span {
+            font-size: 11px;
+            color: #c5a880;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* RESPONSIVO MÓVIL CON MENÚ HAMBURGUESA */
         @media (max-width: 768px) {
             header {
-                flex-direction: column;
-                gap: 20px;
-                padding: 25px 10px;
+                padding: 20px;
             }
-            .logo-area img {
-                height: 70px;
+            .menu-toggle {
+                display: block;
             }
             .nav-container {
-                align-items: center;
+                position: absolute;
+                top: 100%;
+                left: 0;
                 width: 100%;
+                background-color: rgba(11, 11, 11, 0.98);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                padding: 25px 0;
+                gap: 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                display: none; /* Oculto por defecto */
+            }
+            .nav-container.active {
+                display: flex; /* Se muestra al hacer clic en el botón */
             }
             nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
             }
-            nav a {
-                font-size: 11px;
-                letter-spacing: 1px;
+            /* Ajuste táctil para los dropdowns en móvil */
+            .dropdown-content {
+                position: static;
+                transform: none;
+                opacity: 1;
+                visibility: visible;
+                display: none;
+                background: rgba(255,255,255,0.02);
+                border: none;
+                box-shadow: none;
+                max-height: 200px;
+                margin-top: 10px;
+            }
+            .dropdown.active .dropdown-content {
+                display: block;
             }
             .main-content h1 {
                 font-size: 36px;
             }
             .subtitle {
                 font-size: 14px;
-                margin-bottom: 50px;
+                margin-bottom: 40px;
             }
-            /* Cuidado perfecto en móvil: 3 columnas balanceadas y fluidas */
             .brands-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 12px;
                 padding: 0 10px;
             }
             .brands-grid img {
-                max-width: 100%; /* Permite un escalado adaptativo fluido */
-            }
-            .dropdown-content {
-                width: 85vw;
-                max-width: 280px;
+                max-width: 100%;
             }
         }
     </style>
@@ -419,47 +508,47 @@
                 <img src="rplogo.png" alt="RP Guitar Store">
             </a>
         </div>
+
+        <!-- Botón de Hamburguesa Móvil -->
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir Menú">
+            <i class="fas fa-bars"></i>
+        </button>
         
-        <div class="nav-container">
-    <div class="social-icons">
-        <a href="https://www.facebook.com/RpGuitarStore" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://www.instagram.com/rpguitarstore" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.youtube.com/@RicharPerezGuitar" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.tiktok.com/@rpguitarstore1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
-    </div>
+        <div class="nav-container" id="nav-container">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/RpGuitarStore" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/rpguitarstore" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@RicharPerezGuitar" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.tiktok.com/@rpguitarstore1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+            </div>
 
-        <nav>
-    <a href="index.html">Inicio</a>
-    
-    <!-- Menú Guitarras: Ahora apunta a categoria.html -->
-    <div class="dropdown">
-        <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-        <div class="dropdown-content">
-            <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
-            <a href="categoria.html?cat=Guitarras-Acústicas">Acústicas</a>
-            <a href="categoria.html?cat=Electro-Acústicas">Electro Acústicas</a>
-            <a href="categoria.html?cat=Ukeleles">Ukeleles</a>
-        </div>
-    </div>
+            <nav>
+                <a href="index.html">Inicio</a>
+                
+                <div class="dropdown" onclick="toggleDropdown(this)">
+                    <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
+                        <a href="categoria.html?cat=Guitarras-Acústicas">Acústicas</a>
+                        <a href="categoria.html?cat=Electro-Acústicas">Electro Acústicas</a>
+                        <a href="categoria.html?cat=Ukeleles">Ukeleles</a>
+                    </div>
+                </div>
 
-    <!-- Amplificadores: Apunta a categoria.html -->
-    <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
+                <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
 
-    <!-- Pedales: Se llena dinámicamente -->
-    <div class="dropdown">
-        <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-        <div id="menu-pedales" class="dropdown-content"></div>
-    </div>
+                <div class="dropdown" onclick="toggleDropdown(this)">
+                    <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+                    <div id="menu-pedales" class="dropdown-content"></div>
+                </div>
 
-    <!-- Accesorios: Se llena dinámicamente -->
-    <div class="dropdown">
-        <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-        <div id="menu-accesorios" class="dropdown-content"></div>
-    </div>
+                <div class="dropdown" onclick="toggleDropdown(this)">
+                    <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+                    <div id="menu-accesorios" class="dropdown-content"></div>
+                </div>
 
-    <!-- Lauten Audio: Apunta a categoria.html -->
-    <a href="categoria.html?cat=Lauten-Audio">Lauten Audio</a>
-</nav>
+                <a href="categoria.html?cat=Lauten-Audio">Micrófonos</a>
+            </nav>
         </div>
     </header>
 
@@ -471,6 +560,12 @@
             RP Guitar Store guitarras eléctricas, acústicas, bajos, pedales, amplificadores boutique
             <span class="highlight-text">El Hogar del Tono</span>
         </p>
+
+        <!-- BARRA DE BÚSQUEDA GLOBAL -->
+        <div class="search-container">
+            <input type="text" id="global-search-bar" placeholder="Buscar por artículo, marca o categoría..." onkeyup="globalSearch()">
+            <div id="search-results"></div>
+        </div>
 
         <!-- CARRETE DE FOTOS INFINITO -->
         <section class="photo-carousel-section">
@@ -510,12 +605,12 @@
             </div>
         </section>
 
-        <!-- Sección de Marcas Totalmente Actualizada -->
-       <section class="brands-section">
-    <h2 style="margin-bottom: 5px;">MARCAS</h2>
-    <p style="font-family: 'Inter', sans-serif; font-size:30px; color: #fcfbfb; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; opacity: 100; font-weight: 300;">
-        DISTRIBUIDOR OFICIAL DE:
-    </p>
+        <!-- Sección de Marcas -->
+        <section class="brands-section">
+            <h2 style="margin-bottom: 5px;">MARCAS</h2>
+            <p style="font-family: 'Inter', sans-serif; font-size:30px; color: #fcfbfb; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 40px; font-weight: 300;">
+                DISTRIBUIDOR OFICIAL DE:
+            </p>
             
             <div class="brands-grid">
                 <img src="marcas/amt.png" alt="AMT">
@@ -558,53 +653,112 @@
         <p>&copy; 2022 by RP Guitar Store. Proudly created by Antony de León</p>
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC7W3ekV5oP1rX6kdJoZQJGry3w2XlhDHA", 
+            authDomain: "rpguitarstore-fa879.firebaseapp.com", 
+            projectId: "rpguitarstore-fa879", 
+            storageBucket: "rpguitarstore-fa879.firebasestorage.app", 
+            messagingSenderId: "580505435322", 
+            appId: "1:580505435322:web:122d4c01344606c1fe5683" 
+        };
 
-    const firebaseConfig = { 
-    apiKey: "AIzaSyC7W3ekV5oP1rX6kdJoZQJGry3w2XlhDHA", 
-    authDomain: "rpguitarstore-fa879.firebaseapp.com", 
-    projectId: "rpguitarstore-fa879", 
-    storageBucket: "rpguitarstore-fa879.firebasestorage.app", 
-    messagingSenderId: "580505435322", 
-    appId: "1:580505435322:web:122d4c01344606c1fe5683" 
-};
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        async function cargarMenuAutomatico() {
+            try {
+                const snapshot = await getDocs(collection(db, "productos"));
+                const pedalesDiv = document.getElementById('menu-pedales');
+                const accsDiv = document.getElementById('menu-accesorios');
+                
+                const listaPedales = new Set();
+                const listaAccesorios = new Set();
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-    
+                snapshot.forEach(doc => {
+                    const p = doc.data();
+                    if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
+                    if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
+                });
 
-    async function cargarMenuAutomatico() {
-        try {
-            const snapshot = await getDocs(collection(db, "productos"));
-            const pedalesDiv = document.getElementById('menu-pedales');
-            const accsDiv = document.getElementById('menu-accesorios');
-            
-            const listaPedales = new Set();
-            const listaAccesorios = new Set();
-
-            snapshot.forEach(doc => {
-    const p = doc.data();
-    
-    // CAMBIO AQUÍ: Cambiamos 'p.marca' por 'p.categoria'
-    if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
-    if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
-});
-
-// Y ajusta también la generación de botones para que el link use la categoría:
-listaPedales.forEach(cat => {
-    pedalesDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
-});
-listaAccesorios.forEach(cat => {
-    accsDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
-});
-        } catch (error) {
-            console.error("Error cargando el menú:", error);
+                listaPedales.forEach(cat => {
+                    pedalesDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
+                });
+                listaAccesorios.forEach(cat => {
+                    accsDiv.innerHTML += `<a href="categoria.html?cat=${cat}">${cat.toUpperCase()}</a>`;
+                });
+            } catch (error) {
+                console.error("Error cargando el menú:", error);
+            }
         }
-    }
-    cargarMenuAutomatico();
-</script>
+        cargarMenuAutomatico();
+
+        let globalProductsCache = [];
+
+        async function inicializarBuscadorGlobal() {
+            try {
+                const snapshot = await getDocs(collection(db, "productos"));
+                globalProductsCache = snapshot.docs.map(doc => doc.data());
+            } catch (error) {
+                console.error("Error al cargar productos para la búsqueda:", error);
+            }
+        }
+
+        window.globalSearch = () => {
+            const query = document.getElementById('global-search-bar').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('search-results');
+
+            if (query.length === 0) {
+                resultsContainer.style.display = 'none';
+                resultsContainer.innerHTML = '';
+                return;
+            }
+
+            const filtered = globalProductsCache.filter(p => {
+                const name = p.name ? p.name.toLowerCase() : "";
+                const cat = p.categoria ? p.categoria.toLowerCase() : "";
+                const grupo = p.grupo ? p.grupo.toLowerCase() : "";
+                return name.includes(query) || cat.includes(query) || grupo.includes(query);
+            }).slice(0, 8);
+
+            if (filtered.length > 0) {
+                resultsContainer.style.display = 'block';
+                resultsContainer.innerHTML = filtered.map(p => {
+                    const targetCat = p.categoria || p.grupo || 'Guitarras-Eléctricas';
+                    return `
+                        <a href="categoria.html?cat=${encodeURIComponent(targetCat)}" class="search-result-item">
+                            <img src="${p.image || 'rplogo.png'}" alt="${p.name}">
+                            <div class="search-result-info">
+                                <h4>${p.name}</h4>
+                                <span>${(p.categoria || p.grupo || '').replace(/-/g, ' ')} • Q${p.price || '0'}</span>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            } else {
+                resultsContainer.style.display = 'block';
+                resultsContainer.innerHTML = `<div style="padding: 15px; text-align: center; color: rgba(255,255,255,0.4); font-size: 12px;">No se encontraron artículos</div>`;
+            }
+        };
+
+        inicializarBuscadorGlobal();
+    </script>
+
+    <!-- Script para controlar la apertura del menú y submenús en móviles -->
+    <script>
+        function toggleMenu() {
+            const navContainer = document.getElementById('nav-container');
+            navContainer.classList.toggle('active');
+        }
+
+        function toggleDropdown(element) {
+            if (window.innerWidth <= 768) {
+                element.classList.toggle('active');
+            }
+        }
+    </script>
 </body>
 </html>
