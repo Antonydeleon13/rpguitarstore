@@ -19,6 +19,18 @@
         nav { display: flex; gap: 35px; align-items: center; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; }
         nav a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s; }
         nav a:hover, nav a.active { color: #c5a880; }
+        
+        /* Botón de Hamburguesa (Oculto en Escritorio) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
         .dropdown { position: relative; }
         .dropdown-content { opacity: 0; visibility: hidden; transform: translateX(-50%) translateY(15px); position: absolute; background-color: rgba(15, 15, 15, 0.98); backdrop-filter: blur(10px); min-width: 240px; max-height: 400px; overflow-y: auto; box-shadow: 0px 30px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255, 255, 255, 0.06); z-index: 110; top: 100%; left: 50%; padding: 15px 0; transition: all 0.3s ease; }
         .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
@@ -26,7 +38,6 @@
         .dropdown-content a:hover { background-color: rgba(197, 168, 128, 0.06); color: #c5a880; }
         .content-area { max-width: 1200px; margin: 80px auto; padding: 0 40px; position: relative; z-index: 10; text-align: center; }
         
-        /* BUSCADOR Y BOTONES NUEVOS */
         #search-bar { width: 400px; padding: 12px 20px; margin: 20px auto; display: block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; color: white; text-align: center; }
         .filter-buttons { margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .filter-btn { padding: 8px 16px; background: transparent; border: 1px solid #c5a880; color: #c5a880; cursor: pointer; text-transform: uppercase; font-size: 10px; }
@@ -56,54 +67,80 @@
         footer { background-color: #060606; color: rgba(255, 255, 255, 0.35); padding: 90px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.02); position: relative; z-index: 10; margin-top: 100px; }
         .footer-logo { max-width: 150px; margin: 0 auto 40px auto; display: block; filter: brightness(0) invert(1); opacity: 0.65; }
 
-        /* Ajustes de responsividad para móviles */
         @media (max-width: 1024px) {
             #product-grid { grid-template-columns: repeat(3, 1fr); }
         }
       @media (max-width: 768px) {
-    /* 1. Encabezado y navegación */
     header {
-        flex-direction: column !important;
-        padding: 15px !important;
-        height: auto !important;
+        padding: 20px !important;
+    }
+    .menu-toggle {
+        display: block !important;
     }
     .nav-container {
-        align-items: center !important;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
         width: 100% !important;
-        margin-top: 15px !important;
+        background-color: rgba(11, 11, 11, 0.98) !important;
+        backdrop-filter: blur(15px) !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 25px 0 !important;
+        gap: 20px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8) !important;
+        display: none !important;
+    }
+    .nav-container.active {
+        display: flex !important;
     }
     nav {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 10px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 15px !important;
+    }
+    .dropdown-content {
+        position: static !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: none !important;
+        background: rgba(255,255,255,0.02) !important;
+        border: none !important;
+        box-shadow: none !important;
+        max-height: 200px !important;
+        margin-top: 10px !important;
+    }
+    .dropdown.active .dropdown-content {
+        display: block !important;
     }
     #search-bar {
         width: 90% !important;
     }
 
-    /* 2. Grid de productos (Consolidado a 2 columnas) */
 #product-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 10px !important;
-        align-items: stretch !important; /* IMPORTANTE: Hace que las cards de la fila tengan la misma altura */
+        align-items: stretch !important;
     }
 
     .product-card {
         display: flex !important;
         flex-direction: column !important;
-        height: 100% !important; /* Fuerza a la card a ocupar todo el espacio vertical de la fila */
+        height: 100% !important;
         padding: 10px !important;
     }
 
     .product-card p {
-        flex-grow: 1 !important; /* La descripción ocupa el espacio variable */
+        flex-grow: 1 !important;
         margin-bottom: 10px !important;
         text-align: justify !important;
     }
 
     .price {
-        margin-top: auto !important; /* Empuja el precio al fondo de la card */
+        margin-top: auto !important;
         font-size: 13px !important;
         font-weight: 700 !important;
         display: block !important;
@@ -127,8 +164,12 @@
             <img src="rplogo.png" alt="RP Guitar Store">
         </a>
     </div>
+
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir Menú">
+        <i class="fas fa-bars"></i>
+    </button>
     
-   <div class="nav-container">
+   <div class="nav-container" id="nav-container">
     <div class="social-icons">
         <a href="https://www.facebook.com/RpGuitarStore" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
         <a href="https://www.instagram.com/rpguitarstore" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
@@ -136,10 +177,9 @@
         <a href="https://www.tiktok.com/@rpguitarstore1" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
     </div>
 
-    <div class="nav-container">
         <nav>
             <a href="index.html">Inicio</a>
-            <div class="dropdown">
+            <div class="dropdown" onclick="toggleDropdown(this)">
                 <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
                 <div class="dropdown-content">
                     <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
@@ -149,15 +189,15 @@
                 </div>
             </div>
             <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
-            <div class="dropdown">
+            <div class="dropdown" onclick="toggleDropdown(this)">
                 <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
                 <div id="menu-pedales" class="dropdown-content"></div>
             </div>
-            <div class="dropdown">
+            <div class="dropdown" onclick="toggleDropdown(this)">
                 <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
                 <div id="menu-accesorios" class="dropdown-content"></div>
             </div>
-            <a href="categoria.html?cat=Lauten-Audio">Lauten Audio</a>
+            <a href="categoria.html?cat=Lauten-Audio">Micrófonos</a>
         </nav>
     </div>
 </header>
@@ -198,15 +238,42 @@
         listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
         listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
 
-        if (cat) {
-            document.getElementById('cat-title').innerText = cat.replace(/-/g, ' ').toUpperCase();
+       if (cat) {
+            let titulo = (cat === 'Lauten-Audio') ? 'Micrófonos' : cat;
+            document.getElementById('cat-title').innerText = titulo.replace(/-/g, ' ').toUpperCase();
+            const nombreCat = cat.toLowerCase().replace(/-/g, ' ').trim();
+
             allProducts = snapshot.docs
                 .map(doc => doc.data())
                 .filter(p => {
-                    const nombreCat = cat.toLowerCase().replace(/-/g, ' ').trim();
-                    const grupo = p.grupo ? p.grupo.toLowerCase().trim() : "";
-                    const categoria = p.categoria ? p.categoria.toLowerCase().trim() : "";
-                    return grupo === nombreCat || categoria === nombreCat;
+                    const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+                    const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+                    
+                    if (grupo.includes("pedal") || grupo.includes("accesorio")) return false;
+
+                    if (nombreCat.includes("electro")) {
+                        return grupo.includes("electro") && !grupo.includes("guitarras electricas");
+                    }
+                    if (nombreCat.includes("electricas")) {
+                        return (grupo.includes("electrica") || grupo.includes("electricas")) && !grupo.includes("electro");
+                    }
+                    if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
+                        return grupo.includes("acustica") && !grupo.includes("electro");
+                    }
+
+                    return grupo.includes(nombreCat) || categoria.includes(nombreCat);
+                })
+                .sort((a, b) => {
+                    const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
+                    const stockB = parseInt(String(b.stock).replace(/[^0-9]/g, '')) || 0;
+                    
+                    if (stockA > 0 && stockB === 0) return -1;
+                    if (stockA === 0 && stockB > 0) return 1;
+                    
+                    const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
+                    const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
+                    
+                    return priceA - priceB;
                 });
             
             renderButtons(allProducts);
@@ -214,9 +281,10 @@
         }
     }
 
-    function renderButtons(products) {
+   function renderButtons(products) {
         const container = document.getElementById('filter-buttons');
-        const marcas = [...new Set(products.map(p => p.categoria || 'General'))];
+        const marcas = [...new Set(products.map(p => p.categoria || 'General'))].sort();
+        
         container.innerHTML = `<button class="filter-btn active" onclick="filterByBrand('all', this)">TODOS</button>`;
         marcas.forEach(m => {
             container.innerHTML += `<button class="filter-btn" onclick="filterByBrand('${m}', this)">${m.replace(/-/g, ' ').toUpperCase()}</button>`;
@@ -226,7 +294,23 @@
     window.filterByBrand = (brand, el) => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
-        const filtered = brand === 'all' ? allProducts : allProducts.filter(p => (p.categoria || 'General') === brand);
+        
+        const isAll = !brand || brand === 'all' || brand.toLowerCase() === 'all';
+        let filtered = isAll ? [...allProducts] : allProducts.filter(p => (p.categoria || 'General') === brand);
+        
+        filtered.sort((a, b) => {
+            const stockA = parseInt(a.stock) || 0;
+            const stockB = parseInt(b.stock) || 0;
+            
+            if (stockA === 0 && stockB > 0) return 1;
+            if (stockA > 0 && stockB === 0) return -1;
+            
+            const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
+            const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
+            
+            return priceA - priceB;
+        });
+
         renderizarProductos(filtered);
     };
 
@@ -250,6 +334,19 @@
     }
 
     iniciarPagina();
+</script>
+
+<script>
+    function toggleMenu() {
+        const navContainer = document.getElementById('nav-container');
+        navContainer.classList.toggle('active');
+    }
+
+    function toggleDropdown(element) {
+        if (window.innerWidth <= 768) {
+            element.classList.toggle('active');
+        }
+    }
 </script>
 
 <footer>
