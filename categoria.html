@@ -172,11 +172,11 @@
 <body>
 
 <header>
-    <div class="logo-area">
-        <a href="/">
-            <img src="rplogo.png" alt="RP Guitar Store">
-        </a>
-    </div>
+  <div class="logo-area">
+    <a href="index.html">
+        <img src="rplogo.png" alt="RP Guitar Store">
+    </a>
+</div>
 
     <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir Menú">
         <i class="fas fa-bars"></i>
@@ -251,10 +251,10 @@
         listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
         listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
 
-       if (cat) {
+        if (cat) {
             let titulo = (cat === 'Lauten-Audio') ? 'Micrófonos' : cat;
             document.getElementById('cat-title').innerText = titulo.replace(/-/g, ' ').toUpperCase();
-            const nombreCat = cat.toLowerCase().replace(/-/g, ' ').trim();
+            const nombreCat = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim();
 
             allProducts = snapshot.docs
                 .map(doc => doc.data())
@@ -262,8 +262,7 @@
                     const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
                     const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
                     
-                    if (grupo.includes("pedal") || grupo.includes("accesorio")) return false;
-
+                    // Filtro especializado y seguro para cada sección sin bloquear categorías legítimas
                     if (nombreCat.includes("electro")) {
                         return grupo.includes("electro") && !grupo.includes("guitarras electricas");
                     }
@@ -273,8 +272,18 @@
                     if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
                         return grupo.includes("acustica") && !grupo.includes("electro");
                     }
+                    if (nombreCat.includes("amplificador")) {
+                        return grupo.includes("amplificador") || categoria.includes("amplificador");
+                    }
+                    if (nombreCat.includes("pedal")) {
+                        return grupo.includes("pedal") || categoria.includes("pedal") || grupo.includes("pedales");
+                    }
+                    if (nombreCat.includes("accesorio")) {
+                        return grupo.includes("accesorio") || categoria.includes("accesorio") || grupo.includes("accesorios");
+                    }
 
-                    return grupo.includes(nombreCat) || categoria.includes(nombreCat);
+                    // Coincidencia general para marcas, micrófonos u otros artículos
+                    return grupo.includes(nombreCat) || categoria.includes(nombreCat) || grupo === nombreCat || categoria === nombreCat;
                 })
                 .sort((a, b) => {
                     const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
