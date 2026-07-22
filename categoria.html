@@ -67,6 +67,253 @@
         footer { background-color: #060606; color: rgba(255, 255, 255, 0.35); padding: 90px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.02); position: relative; z-index: 10; margin-top: 100px; }
         .footer-logo { max-width: 150px; margin: 0 auto 40px auto; display: block; filter: brightness(0) invert(1); opacity: 0.65; }
 
+        /* ESTILOS DEL BOTÓN AGREGAR */
+        .btn-add-cart {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px 15px;
+            background: transparent;
+            border: 1px solid #c5a880;
+            color: #c5a880;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .btn-add-cart:hover {
+            background: #c5a880;
+            color: #000;
+        }
+
+        /* BOTÓN FLOTANTE CARRITO */
+        .cart-float-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #c5a880;
+            color: #000000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            cursor: pointer;
+            z-index: 9998;
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+        .cart-float-btn:hover {
+            transform: scale(1.08);
+            background-color: #d4b890;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: #e74c3c;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0b0b0b;
+        }
+
+        /* SIDEBAR CARRITO */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+        .cart-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background-color: #121212;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+            box-sizing: border-box;
+        }
+        .cart-sidebar.active {
+            right: 0;
+        }
+        .cart-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-header h2 {
+            margin: 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            color: #c5a880;
+            letter-spacing: 1px;
+        }
+        .cart-close-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 22px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .cart-close-btn:hover {
+            color: #ffffff;
+        }
+        .cart-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .cart-empty-msg {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 40px;
+            font-size: 14px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .cart-item img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 4px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .cart-item-price {
+            font-size: 12px;
+            color: #c5a880;
+            font-weight: 600;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:hover {
+            background: #c5a880;
+            color: #000;
+        }
+        .cart-item-remove {
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.2s;
+            padding: 5px;
+        }
+        .cart-item-remove:hover {
+            color: #e74c3c;
+        }
+        .cart-footer {
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: #0a0a0a;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .cart-total-price {
+            color: #c5a880;
+            font-size: 20px;
+        }
+        
+        /* BOTÓN COMPRAR EN TONO NEGRO/GRIS ELEGANTE */
+        .btn-checkout-wa {
+            width: 100%;
+            padding: 14px;
+            background: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-checkout-wa:hover {
+            background: #252525;
+            border-color: #c5a880;
+            color: #c5a880;
+        }
+
         @media (max-width: 1024px) {
             #product-grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -120,7 +367,6 @@
         display: block !important;
     }
     
-    /* Título principal adaptado y reducido para móviles */
     #cat-title {
         font-size: 28px !important;
         margin-bottom: 20px !important;
@@ -161,6 +407,17 @@
 
     .product-card h3 {
         font-size: 14px !important;
+    }
+
+    .cart-sidebar {
+        max-width: 100%;
+    }
+
+    .cart-float-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
     }
 }
 @media (max-width: 480px) {
@@ -224,13 +481,201 @@
     <div id="product-grid"></div>
 </main>
 
+<!-- BOTÓN FLOTANTE Y PANEL DE CARRITO -->
+<div class="cart-float-btn" onclick="toggleCartModal()">
+    <i class="fas fa-shopping-bag"></i>
+    <span class="cart-badge" id="cart-badge">0</span>
+</div>
+
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCartModal()"></div>
+
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <h2>TU CARRITO</h2>
+        <button class="cart-close-btn" onclick="toggleCartModal()">&times;</button>
+    </div>
+    <div class="cart-body" id="cart-items-container"></div>
+    <div class="cart-footer">
+    <!-- CAMPOS DE DATOS DEL CLIENTE -->
+    <div style="margin-bottom: 15px; text-align: left;">
+        <input type="text" id="cliente-nombre" placeholder="Tu Nombre y Apellido" style="width: 100%; padding: 10px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white; box-sizing: border-box; font-size: 13px;">
+    </div>
+
+    <div class="cart-total">
+        <span>TOTAL:</span>
+        <span class="cart-total-price" id="cart-total-price">Q0.00</span>
+    </div>
+    <button class="btn-checkout-wa" onclick="checkoutWhatsApp()">
+        COMPRAR
+    </button>
+</div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyC7W3ekV5oP1rX6kdJoZQJGry3w2XlhDHA", authDomain: "rpguitarstore-fa879.firebaseapp.com", projectId: "rpguitarstore-fa879", storageBucket: "rpguitarstore-fa879.firebasestorage.app", messagingSenderId: "580505435322", appId: "1:580505435322:web:122d4c01344606c1fe5683" };
     const db = getFirestore(initializeApp(firebaseConfig));
     let allProducts = [];
+
+    let cart = JSON.parse(localStorage.getItem('rp_cart')) || [];
+
+    function saveCart() {
+        localStorage.setItem('rp_cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    window.addToCart = (id) => {
+        const product = allProducts.find(p => p.id === id);
+        if (!product) return;
+
+        const existingItem = cart.find(item => item.id === id);
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: parseFloat(String(product.price).replace(/,/g, '').trim()) || 0,
+                image: product.image,
+                qty: 1
+            });
+        }
+        saveCart();
+        toggleCartModal(true);
+    };
+
+    window.updateQty = (id, change) => {
+        const item = cart.find(item => item.id === id);
+        if (item) {
+            item.qty += change;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveCart();
+        }
+    };
+
+    window.removeFromCart = (id) => {
+        cart = cart.filter(item => item.id !== id);
+        saveCart();
+    };
+
+    function renderCart() {
+        const container = document.getElementById('cart-items-container');
+        const badge = document.getElementById('cart-badge');
+        const totalPriceEl = document.getElementById('cart-total-price');
+
+        const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+        badge.innerText = totalQty;
+
+        if (cart.length === 0) {
+            container.innerHTML = `<div class="cart-empty-msg">Tu carrito está vacío.</div>`;
+            totalPriceEl.innerText = "Q0.00";
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            const itemTotal = item.price * item.qty;
+            total += itemTotal;
+            return `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <p class="cart-item-title">${item.name}</p>
+                        <span class="cart-item-price">Q${item.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="updateQty('${item.id}', -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+                        </div>
+                    </div>
+                    <i class="fas fa-trash cart-item-remove" onclick="removeFromCart('${item.id}')"></i>
+                </div>
+            `;
+        }).join('');
+
+        totalPriceEl.innerText = `Q${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+    }
+
+    window.toggleCartModal = (forceOpen = false) => {
+        const sidebar = document.getElementById('cart-sidebar');
+        const overlay = document.getElementById('cart-overlay');
+        
+        if (forceOpen) {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        } else {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    };
+
+    // GUARDAR PEDIDO EN FIREBASE Y MANDAR LINK DE ADMIN A WHATSAPP
+    window.checkoutWhatsApp = async () => {
+    if (cart.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+    }
+
+    const inputNombre = document.getElementById('cliente-nombre');
+    const nombre = inputNombre ? inputNombre.value.trim() : '';
+
+    if (!nombre) {
+        alert("Por favor ingresa tu nombre para completar el pedido.");
+        return;
+    }
+
+    let total = 0;
+    const itemsPedido = cart.map(item => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        return {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            qty: item.qty,
+            image: item.image,
+            subtotal: subtotal
+        };
+    });
+
+    try {
+        const docRef = await addDoc(collection(db, "pedidos"), {
+            cliente: { nombre },
+            items: itemsPedido,
+            total: total,
+            fecha: new Date().toLocaleString("es-GT"),
+            timestamp: Date.now()
+        });
+
+        const codigoPedido = docRef.id.substring(0, 6).toUpperCase();
+
+        let mensaje = `¡Hola RP Guitar Store! Mi nombre es *${nombre}*.\nQuisiera realizar el siguiente pedido:\n\n`;
+        cart.forEach((item, index) => {
+            const subtotal = item.price * item.qty;
+            mensaje += `*${index + 1}. ${item.name}*\n   Cantidad: ${item.qty} | Subtotal: Q${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
+        });
+
+        mensaje += `\n*TOTAL DEL PEDIDO:* Q${total.toLocaleString('en-US', {minimumFractionDigits: 2})}\n`;
+        mensaje += `*Código de Pedido:* #${codigoPedido}\n\n¿Me podrías brindar los datos de pago?`;
+
+        const phone = "50256167009";
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`;
+        
+        cart = [];
+        saveCart();
+        toggleCartModal(false);
+
+        window.open(url, '_blank');
+
+    } catch (error) {
+        console.error("Error al registrar pedido:", error);
+        alert("Ocurrió un error al procesar el pedido.");
+    }
+};
 
     async function iniciarPagina() {
         const snapshot = await getDocs(collection(db, "productos"));
@@ -244,12 +689,13 @@
 
         snapshot.forEach(doc => {
             const p = doc.data();
+            p.id = doc.id;
             if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
             if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
         });
 
-        listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
-        listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
+        listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Pedales">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
+listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Accesorios">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
 
         if (cat) {
             let titulo = (cat === 'Lauten-Audio') ? 'Micrófonos' : cat;
@@ -257,50 +703,57 @@
             const nombreCat = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim();
 
             allProducts = snapshot.docs
-                .map(doc => doc.data())
-                .filter(p => {
-                    const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
-                    const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
-                    
-                    // Filtro especializado y seguro para cada sección sin bloquear categorías legítimas
-                    if (nombreCat.includes("electro")) {
-                        return grupo.includes("electro") && !grupo.includes("guitarras electricas");
-                    }
-                    if (nombreCat.includes("electricas")) {
-                        return (grupo.includes("electrica") || grupo.includes("electricas")) && !grupo.includes("electro");
-                    }
-                    if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
-                        return grupo.includes("acustica") && !grupo.includes("electro");
-                    }
-                    if (nombreCat.includes("amplificador")) {
-                        return grupo.includes("amplificador") || categoria.includes("amplificador");
-                    }
-                    if (nombreCat.includes("pedal")) {
-                        return grupo.includes("pedal") || categoria.includes("pedal") || grupo.includes("pedales");
-                    }
-                    if (nombreCat.includes("accesorio")) {
-                        return grupo.includes("accesorio") || categoria.includes("accesorio") || grupo.includes("accesorios");
-                    }
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+    .filter(p => {
+        const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+        const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+        
+        // Leemos si la URL trae un parámetro de grupo específico (ej. ?cat=suhr&grupo=pedales)
+        const grupoUrl = params.get('grupo') ? params.get('grupo').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
 
-                    // Coincidencia general para marcas, micrófonos u otros artículos
-                    return grupo.includes(nombreCat) || categoria.includes(nombreCat) || grupo === nombreCat || categoria === nombreCat;
-                })
-                .sort((a, b) => {
-                    const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
-                    const stockB = parseInt(String(b.stock).replace(/[^0-9]/g, '')) || 0;
-                    
-                    if (stockA > 0 && stockB === 0) return -1;
-                    if (stockA === 0 && stockB > 0) return 1;
-                    
-                    const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
-                    const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
-                    
-                    return priceA - priceB;
-                });
-            
-            renderButtons(allProducts);
-            renderizarProductos(allProducts);
+        if (nombreCat.includes("electro")) {
+            return grupo.includes("electro") && !grupo.includes("guitarras electricas");
         }
+        if (nombreCat.includes("electricas")) {
+            return (grupo.includes("electrica") || grupo.includes("electricas")) && !grupo.includes("electro");
+        }
+        if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
+            return grupo.includes("acustica") && !grupo.includes("electro");
+        }
+        if (nombreCat.includes("amplificador")) {
+            return grupo.includes("amplificador") || categoria.includes("amplificador");
+        }
+        if (nombreCat.includes("pedal") && !grupoUrl) {
+            return grupo.includes("pedal") || categoria.includes("pedal") || grupo.includes("pedales");
+        }
+        if (nombreCat.includes("accesorio")) {
+            return grupo.includes("accesorio") || categoria.includes("accesorio") || grupo.includes("accesorios");
+        }
+
+        // Si en la URL viene especificado el grupo, exige que COINCIDAN tanto la marca como el grupo
+        if (grupoUrl) {
+            return (categoria.includes(nombreCat) || grupo.includes(nombreCat)) && grupo.includes(grupoUrl);
+        }
+
+        return grupo.includes(nombreCat) || categoria.includes(nombreCat) || grupo === nombreCat || categoria === nombreCat;
+    })
+    .sort((a, b) => {
+        const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
+        const stockB = parseInt(String(b.stock).replace(/[^0-9]/g, '')) || 0;
+        
+        if (stockA > 0 && stockB === 0) return -1;
+        if (stockA === 0 && stockB > 0) return 1;
+        
+        const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
+        const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
+        
+        return priceA - priceB;
+    });
+
+renderButtons(allProducts);
+renderizarProductos(allProducts);
+        }
+        renderCart();
     }
 
    function renderButtons(products) {
@@ -344,15 +797,21 @@
 
     function renderizarProductos(productos) {
         const grid = document.getElementById('product-grid');
-        grid.innerHTML = productos.length > 0 ? productos.map(data => `
+        grid.innerHTML = productos.length > 0 ? productos.map(data => {
+            const isAgotado = (parseInt(data.stock) || 0) === 0;
+            return `
             <div class="product-card">
                 <img src="${data.image}">
                 <h3>${data.name}</h3>
                 <p style="color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.6; text-align: justify; margin: 10px 0;">
                     ${data.desc || ''}
                 </p>
-                ${(parseInt(data.stock) || 0) === 0 ? '<span style="color:red; font-weight:700;">AGOTADO</span>' : '<span class="price">Q'+data.price+'</span>'}
-            </div>`).join('') : "<p>No hay productos en esta categoría.</p>";
+                ${isAgotado ? '<span style="color:red; font-weight:700;">AGOTADO</span>' : '<span class="price">Q'+data.price+'</span>'}
+                <button class="btn-add-cart" ${isAgotado ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : `onclick="addToCart('${data.id}')"`}>
+                    ${isAgotado ? 'Sin stock' : 'Agregar al Carrito'}
+                </button>
+            </div>`;
+        }).join('') : "<p>No hay productos en esta categoría.</p>";
     }
 
     iniciarPagina();
@@ -366,17 +825,12 @@
 
     function toggleDropdown(element) {
         if (window.innerWidth <= 768) {
-            // Buscamos todos los menús desplegables dentro de la navegación móvil
             const allDropdowns = document.querySelectorAll('.dropdown');
-            
-            // Recorremos cada uno y cerramos los demás que no sean el que acabamos de presionar
             allDropdowns.forEach(item => {
                 if (item !== element) {
                     item.classList.remove('active');
                 }
             });
-
-            // Alternamos el estado del elemento actual (si estaba abierto se cierra, si estaba cerrado se abre)
             element.classList.toggle('active');
         }
     }
