@@ -180,12 +180,25 @@ cargarCategoriasAdmin();
         
         const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
         const grupo = grupoSelector.value;
+        const file = document.getElementById('fileInput').files[0];
 
         if (id) {
-            await updateDoc(doc(db, "productos", id), { name, price, stock, categoria, grupo, desc });
+            Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            // Objeto de datos a actualizar
+            let datosActualizados = { name, price, stock, categoria, grupo, desc };
+
+            // SI EL USUARIO ELIGIÓ UNA NUEVA IMAGEN AL EDITAR, LA SUBIMOS A STORAGE
+            if (file) {
+                const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
+                await uploadBytes(storageRef, file);
+                const nuevaImagenUrl = await getDownloadURL(storageRef);
+                datosActualizados.image = nuevaImagenUrl; // Agregamos la nueva URL
+            }
+
+            await updateDoc(doc(db, "productos", id), datosActualizados);
             Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
         } else {
-            const file = document.getElementById('fileInput').files[0];
             if (!file) return Swal.fire("Error", "Elige una imagen", "error");
             Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
