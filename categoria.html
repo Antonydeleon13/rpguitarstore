@@ -663,13 +663,14 @@
         mensaje += `*Código de Pedido:* #${codigoPedido}\n\n¿Me podrías brindar los datos de pago?`;
 
         const phone = "50256167009";
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`;
+        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(mensaje)}`;
         
         cart = [];
         saveCart();
         toggleCartModal(false);
 
-        window.open(url, '_blank');
+        // En móviles usamos window.location.href para forzar la apertura de la App de WhatsApp
+        window.location.href = url;
 
     } catch (error) {
         console.error("Error al registrar pedido:", error);
