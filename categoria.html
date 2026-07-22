@@ -424,6 +424,15 @@
     #product-grid { grid-template-columns: 1fr; }
     .content-area { padding: 0 20px; margin: 40px auto; }
 }
+
+
+/* EFECTO DE RESALTADO / SUBRAYADO ELEGANTE AL SELECCIONAR DESDE EL BUSCADOR */
+.product-card.highlight-selected {
+    border: 2px solid #c5a880 !important;
+    box-shadow: 0 0 25px rgba(197, 168, 128, 0.5) !important;
+    transform: scale(1.03);
+    transition: all 0.5s ease;
+}
     </style>
 </head>
 <body>
@@ -448,27 +457,28 @@
     </div>
 
         <nav>
-            <a href="index.html">Inicio</a>
-            <div class="dropdown" onclick="toggleDropdown(this)">
-                <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-                <div class="dropdown-content">
-                    <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
-                    <a href="categoria.html?cat=Guitarras-Acústicas">Acústicas</a>
-                    <a href="categoria.html?cat=Electro-Acústicas">Electro Acústicas</a>
-                    <a href="categoria.html?cat=Ukeleles">Ukeleles</a>
-                </div>
-            </div>
-            <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
-            <div class="dropdown" onclick="toggleDropdown(this)">
-                <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-                <div id="menu-pedales" class="dropdown-content"></div>
-            </div>
-            <div class="dropdown" onclick="toggleDropdown(this)">
-                <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-                <div id="menu-accesorios" class="dropdown-content"></div>
-            </div>
-            <a href="categoria.html?cat=Lauten-Audio">Micrófonos</a>
-        </nav>
+    <a href="index.html">Inicio</a>
+    <div class="dropdown" onclick="toggleDropdown(this)">
+        <a href="#" class="dropdown-trigger">Instrumentos <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div class="dropdown-content">
+            <a href="categoria.html?cat=Guitarras-Eléctricas&grupo=Guitarras-Eléctricas">Eléctricas</a>
+            <a href="categoria.html?cat=Guitarras-Acústicas&grupo=Guitarras-Acústicas">Acústicas</a>
+            <a href="categoria.html?cat=Electro-Acústicas&grupo=Electro-Acústicas">Electro Acústicas</a>
+            <a href="categoria.html?cat=Bajos&grupo=Bajos">Bajos</a>
+            <a href="categoria.html?cat=Ukeleles&grupo=Ukeleles">Ukeleles</a>
+        </div>
+    </div>
+    <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
+    <div class="dropdown" onclick="toggleDropdown(this)">
+        <a href="#" class="dropdown-trigger">Pedales <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div id="menu-pedales" class="dropdown-content"></div>
+    </div>
+    <div class="dropdown" onclick="toggleDropdown(this)">
+        <a href="#" class="dropdown-trigger">Accesorios <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+        <div id="menu-accesorios" class="dropdown-content"></div>
+    </div>
+    <a href="categoria.html?cat=Lauten-Audio">Micrófonos</a>
+</nav>
     </div>
 </header>
 
@@ -678,72 +688,111 @@
     }
 };
 
-    async function iniciarPagina() {
-        const snapshot = await getDocs(collection(db, "productos"));
-        const params = new URLSearchParams(window.location.search);
-        const cat = params.get('cat'); 
+  async function iniciarPagina() {
+    const snapshot = await getDocs(collection(db, "productos"));
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('cat'); 
 
-        const pedalesDiv = document.getElementById('menu-pedales');
-        const accsDiv = document.getElementById('menu-accesorios');
-        const listaPedales = new Set();
-        const listaAccesorios = new Set();
+    const pedalesDiv = document.getElementById('menu-pedales');
+    const accsDiv = document.getElementById('menu-accesorios');
+    const listaPedales = new Set();
+    const listaAccesorios = new Set();
 
-        snapshot.forEach(doc => {
-            const p = doc.data();
-            p.id = doc.id;
-            if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
-            if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
-        });
+    snapshot.forEach(doc => {
+        const p = doc.data();
+        p.id = doc.id;
+        if (p.grupo === 'Pedales' && p.categoria) listaPedales.add(p.categoria);
+        if (p.grupo === 'Accesorios' && p.categoria) listaAccesorios.add(p.categoria);
+    });
 
-        listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Pedales">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
-listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Accesorios">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
+    listaPedales.forEach(c => pedalesDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Pedales">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
+    listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=${c}&grupo=Accesorios">${c.replace(/-/g, ' ').toUpperCase()}</a>`);
 
-        if (cat) {
-            let titulo = (cat === 'Lauten-Audio') ? 'Micrófonos' : cat;
-            document.getElementById('cat-title').innerText = titulo.replace(/-/g, ' ').toUpperCase();
-            const nombreCat = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim();
+    if (cat) {
+        let titulo = (cat === 'Lauten-Audio') ? 'Micrófonos' : cat;
+        document.getElementById('cat-title').innerText = titulo.replace(/-/g, ' ').toUpperCase();
+        const nombreCat = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim();
 
-            allProducts = snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() }))
-    .filter(p => {
-        const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
-        const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+        allProducts = snapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() }))
+            .filter(p => {
+                const grupo = p.grupo ? p.grupo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+                const categoria = p.categoria ? p.categoria.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+                
+                // Leemos si la URL trae un parámetro de grupo específico
+                const grupoUrl = params.get('grupo') ? params.get('grupo').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
+
+                if (nombreCat === "electro acusticas" || nombreCat === "electro-acusticas" || nombreCat.includes("electro-acustica") || nombreCat.includes("electro acustica")) {
+                    return grupo.includes("electro") && !grupo.includes("guitarras electricas");
+                }
+                if (nombreCat.includes("electricas")) {
+                    return (grupo.includes("electrica") || grupo.includes("electricas")) && !grupo.includes("electro");
+                }
+                if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
+                    return grupo.includes("acustica") && !grupo.includes("electro");
+                }
+                if (nombreCat.includes("bajo") || nombreCat.includes("bajos")) {
+                    return grupo.includes("bajo") || categoria.includes("bajo");
+                }
+                if (nombreCat.includes("amplificador")) {
+                    return grupo.includes("amplificador") || categoria.includes("amplificador");
+                }
+                if (nombreCat.includes("pedal") && !grupoUrl) {
+                    return grupo.includes("pedal") || categoria.includes("pedal") || grupo.includes("pedales");
+                }
+                if (nombreCat.includes("accesorio")) {
+                    return grupo.includes("accesorio") || categoria.includes("accesorio") || grupo.includes("accesorios");
+                }
+
+                // Si en la URL viene especificado el grupo, exige coincidencia
+                if (grupoUrl) {
+                    return (categoria.includes(nombreCat) || grupo.includes(nombreCat)) && grupo.includes(grupoUrl);
+                }
+
+                return grupo.includes(nombreCat) || categoria.includes(nombreCat) || grupo === nombreCat || categoria === nombreCat;
+            })
+            .sort((a, b) => {
+                const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
+                const stockB = parseInt(String(b.stock).replace(/[^0-9]/g, '')) || 0;
+                
+                if (stockA > 0 && stockB === 0) return -1;
+                if (stockA === 0 && stockB > 0) return 1;
+                
+                const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
+                const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
+                
+                return priceA - priceB;
+            });
+
+        renderButtons(allProducts);
+        renderizarProductos(allProducts);
+    }
+    renderCart();
+}
+
+function renderButtons(products) {
+    const container = document.getElementById('filter-buttons');
+    const marcas = [...new Set(products.map(p => p.categoria || 'General'))].sort();
+    
+    container.innerHTML = `<button class="filter-btn active" onclick="filterByBrand('all', this)">TODOS</button>`;
+    marcas.forEach(m => {
+        container.innerHTML += `<button class="filter-btn" onclick="filterByBrand('${m}', this)">${m.replace(/-/g, ' ').toUpperCase()}</button>`;
+    });
+}
+
+window.filterByBrand = (brand, el) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    
+    const isAll = !brand || brand === 'all' || brand.toLowerCase() === 'all';
+    let filtered = isAll ? [...allProducts] : allProducts.filter(p => (p.categoria || 'General') === brand);
+    
+    filtered.sort((a, b) => {
+        const stockA = parseInt(a.stock) || 0;
+        const stockB = parseInt(b.stock) || 0;
         
-        // Leemos si la URL trae un parámetro de grupo específico (ej. ?cat=suhr&grupo=pedales)
-        const grupoUrl = params.get('grupo') ? params.get('grupo').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-/g, ' ').trim() : "";
-
-        if (nombreCat.includes("electro")) {
-            return grupo.includes("electro") && !grupo.includes("guitarras electricas");
-        }
-        if (nombreCat.includes("electricas")) {
-            return (grupo.includes("electrica") || grupo.includes("electricas")) && !grupo.includes("electro");
-        }
-        if (nombreCat.includes("acusticas") && !nombreCat.includes("electro")) {
-            return grupo.includes("acustica") && !grupo.includes("electro");
-        }
-        if (nombreCat.includes("amplificador")) {
-            return grupo.includes("amplificador") || categoria.includes("amplificador");
-        }
-        if (nombreCat.includes("pedal") && !grupoUrl) {
-            return grupo.includes("pedal") || categoria.includes("pedal") || grupo.includes("pedales");
-        }
-        if (nombreCat.includes("accesorio")) {
-            return grupo.includes("accesorio") || categoria.includes("accesorio") || grupo.includes("accesorios");
-        }
-
-        // Si en la URL viene especificado el grupo, exige que COINCIDAN tanto la marca como el grupo
-        if (grupoUrl) {
-            return (categoria.includes(nombreCat) || grupo.includes(nombreCat)) && grupo.includes(grupoUrl);
-        }
-
-        return grupo.includes(nombreCat) || categoria.includes(nombreCat) || grupo === nombreCat || categoria === nombreCat;
-    })
-    .sort((a, b) => {
-        const stockA = parseInt(String(a.stock).replace(/[^0-9]/g, '')) || 0;
-        const stockB = parseInt(String(b.stock).replace(/[^0-9]/g, '')) || 0;
-        
-        if (stockA > 0 && stockB === 0) return -1;
         if (stockA === 0 && stockB > 0) return 1;
+        if (stockA > 0 && stockB === 0) return -1;
         
         const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
         const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
@@ -751,71 +800,70 @@ listaAccesorios.forEach(c => accsDiv.innerHTML += `<a href="categoria.html?cat=$
         return priceA - priceB;
     });
 
-renderButtons(allProducts);
-renderizarProductos(allProducts);
+    renderizarProductos(filtered);
+};
+
+window.filterProducts = () => {
+    const val = document.getElementById('search-bar').value.toLowerCase();
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
+    renderizarProductos(filtered);
+};
+
+function renderizarProductos(productos) {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = productos.length > 0 ? productos.map(data => {
+        const isAgotado = (parseInt(data.stock) || 0) === 0;
+        return `
+        <div class="product-card" data-id="${data.id}">
+            <img src="${data.image}">
+            <h3>${data.name}</h3>
+            <p style="color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.6; text-align: justify; margin: 10px 0;">
+                ${data.desc || ''}
+            </p>
+            ${isAgotado ? '<span style="color:red; font-weight:700;">AGOTADO</span>' : '<span class="price">Q'+data.price+'</span>'}
+            <button class="btn-add-cart" ${isAgotado ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : `onclick="addToCart('${data.id}')"`}>
+                ${isAgotado ? 'Sin stock' : 'Agregar al Carrito'}
+            </button>
+        </div>`;
+    }).join('') : "<p>Artículos no disponibles aún.</p>";
+
+    // RESALTAR Y HACER SCROLL ÚNICAMENTE AL PRODUCTO ESPECÍFICO
+    const params = new URLSearchParams(window.location.search);
+    const selectId = params.get('selectId');
+    const selectedName = params.get('select');
+
+    let tarjetaEncontrada = null;
+
+    // 1. Prioridad Máxima: Buscar por ID directo si existe y no es "undefined"
+    if (selectId && selectId !== 'undefined') {
+        tarjetaEncontrada = grid.querySelector(`.product-card[data-id="${selectId}"]`);
+    }
+
+    // 2. Si no hay ID válido, buscar por nombre exacto
+    if (!tarjetaEncontrada && selectedName) {
+        const targetClean = decodeURIComponent(selectedName).trim().toLowerCase().replace(/-/g, ' ');
+        const cards = grid.querySelectorAll('.product-card');
+
+        for (const card of cards) {
+            const titleEl = card.querySelector('h3');
+            const titleClean = titleEl ? titleEl.innerText.trim().toLowerCase().replace(/-/g, ' ') : '';
+            if (titleClean === targetClean) {
+                tarjetaEncontrada = card;
+                break;
+            }
         }
-        renderCart();
     }
 
-   function renderButtons(products) {
-        const container = document.getElementById('filter-buttons');
-        const marcas = [...new Set(products.map(p => p.categoria || 'General'))].sort();
-        
-        container.innerHTML = `<button class="filter-btn active" onclick="filterByBrand('all', this)">TODOS</button>`;
-        marcas.forEach(m => {
-            container.innerHTML += `<button class="filter-btn" onclick="filterByBrand('${m}', this)">${m.replace(/-/g, ' ').toUpperCase()}</button>`;
-        });
+    // 3. Aplicar estilo y scroll
+    if (tarjetaEncontrada) {
+        tarjetaEncontrada.classList.add('highlight-selected');
+        setTimeout(() => {
+            tarjetaEncontrada.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
     }
+}
 
-    window.filterByBrand = (brand, el) => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        
-        const isAll = !brand || brand === 'all' || brand.toLowerCase() === 'all';
-        let filtered = isAll ? [...allProducts] : allProducts.filter(p => (p.categoria || 'General') === brand);
-        
-        filtered.sort((a, b) => {
-            const stockA = parseInt(a.stock) || 0;
-            const stockB = parseInt(b.stock) || 0;
-            
-            if (stockA === 0 && stockB > 0) return 1;
-            if (stockA > 0 && stockB === 0) return -1;
-            
-            const priceA = parseFloat(String(a.price).replace(/,/g, '').trim()) || 0;
-            const priceB = parseFloat(String(b.price).replace(/,/g, '').trim()) || 0;
-            
-            return priceA - priceB;
-        });
-
-        renderizarProductos(filtered);
-    };
-
-    window.filterProducts = () => {
-        const val = document.getElementById('search-bar').value.toLowerCase();
-        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
-        renderizarProductos(filtered);
-    };
-
-    function renderizarProductos(productos) {
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = productos.length > 0 ? productos.map(data => {
-            const isAgotado = (parseInt(data.stock) || 0) === 0;
-            return `
-            <div class="product-card">
-                <img src="${data.image}">
-                <h3>${data.name}</h3>
-                <p style="color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.6; text-align: justify; margin: 10px 0;">
-                    ${data.desc || ''}
-                </p>
-                ${isAgotado ? '<span style="color:red; font-weight:700;">AGOTADO</span>' : '<span class="price">Q'+data.price+'</span>'}
-                <button class="btn-add-cart" ${isAgotado ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : `onclick="addToCart('${data.id}')"`}>
-                    ${isAgotado ? 'Sin stock' : 'Agregar al Carrito'}
-                </button>
-            </div>`;
-        }).join('') : "<p>No hay productos en esta categoría.</p>";
-    }
-
-    iniciarPagina();
+iniciarPagina();
 </script>
 
 <script>
