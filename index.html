@@ -529,15 +529,16 @@
             <nav>
                 <a href="index.html">Inicio</a>
                 
-                <div class="dropdown" onclick="toggleDropdown(this)">
-                    <a href="#" class="dropdown-trigger">Guitarras <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
-                    <div class="dropdown-content">
-                        <a href="categoria.html?cat=Guitarras-Eléctricas">Eléctricas</a>
-                        <a href="categoria.html?cat=Guitarras-Acústicas">Acústicas</a>
-                        <a href="categoria.html?cat=Electro-Acústicas">Electro Acústicas</a>
-                        <a href="categoria.html?cat=Ukeleles">Ukeleles</a>
-                    </div>
-                </div>
+               <div class="dropdown" onclick="toggleDropdown(this)">
+    <a href="#" class="dropdown-trigger">Instrumentos <i class="fas fa-chevron-down" style="margin-left: 5px;"></i></a>
+    <div class="dropdown-content">
+        <a href="categoria.html?cat=Guitarras-Eléctricas&grupo=Guitarras-Eléctricas">Eléctricas</a>
+        <a href="categoria.html?cat=Guitarras-Acústicas&grupo=Guitarras-Acústicas">Acústicas</a>
+        <a href="categoria.html?cat=Electro-Acústicas&grupo=Electro-Acústicas">Electro Acústicas</a>
+        <a href="categoria.html?cat=Bajos&grupo=Bajos">Bajos</a>
+        <a href="categoria.html?cat=Ukeleles&grupo=Ukeleles">Ukeleles</a>
+    </div>
+</div>
 
                 <a href="categoria.html?cat=Amplificadores">Amplificadores</a>
 
@@ -702,51 +703,54 @@
 
         let globalProductsCache = [];
 
-        async function inicializarBuscadorGlobal() {
-            try {
-                const snapshot = await getDocs(collection(db, "productos"));
-                globalProductsCache = snapshot.docs.map(doc => doc.data());
-            } catch (error) {
-                console.error("Error al cargar productos para la búsqueda:", error);
-            }
-        }
+     async function inicializarBuscadorGlobal() {
+    try {
+        const snapshot = await getDocs(collection(db, "productos"));
+        // Extraemos { id: doc.id }
+        globalProductsCache = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+        console.error("Error al cargar productos para la búsqueda:", error);
+    }
+}
 
         window.globalSearch = () => {
-            const query = document.getElementById('global-search-bar').value.toLowerCase().trim();
-            const resultsContainer = document.getElementById('search-results');
+    const query = document.getElementById('global-search-bar').value.toLowerCase().trim();
+    const resultsContainer = document.getElementById('search-results');
 
-            if (query.length === 0) {
-                resultsContainer.style.display = 'none';
-                resultsContainer.innerHTML = '';
-                return;
-            }
+    if (query.length === 0) {
+        resultsContainer.style.display = 'none';
+        resultsContainer.innerHTML = '';
+        return;
+    }
 
-            const filtered = globalProductsCache.filter(p => {
-                const name = p.name ? p.name.toLowerCase() : "";
-                const cat = p.categoria ? p.categoria.toLowerCase() : "";
-                const grupo = p.grupo ? p.grupo.toLowerCase() : "";
-                return name.includes(query) || cat.includes(query) || grupo.includes(query);
-            }).slice(0, 8);
+    const filtered = globalProductsCache.filter(p => {
+        const name = p.name ? p.name.toLowerCase() : "";
+        const cat = p.categoria ? p.categoria.toLowerCase() : "";
+        const grupo = p.grupo ? p.grupo.toLowerCase() : "";
+        return name.includes(query) || cat.includes(query) || grupo.includes(query);
+    }).slice(0, 8);
 
-            if (filtered.length > 0) {
-                resultsContainer.style.display = 'block';
-                resultsContainer.innerHTML = filtered.map(p => {
-                    const targetCat = p.categoria || p.grupo || 'Guitarras-Eléctricas';
-                    return `
-                        <a href="categoria.html?cat=${encodeURIComponent(targetCat)}" class="search-result-item">
-                            <img src="${p.image || 'rplogo.png'}" alt="${p.name}">
-                            <div class="search-result-info">
-                                <h4>${p.name}</h4>
-                                <span>${(p.categoria || p.grupo || '').replace(/-/g, ' ')} • Q${p.price || '0'}</span>
-                            </div>
-                        </a>
-                    `;
-                }).join('');
-            } else {
-                resultsContainer.style.display = 'block';
-                resultsContainer.innerHTML = `<div style="padding: 15px; text-align: center; color: rgba(255,255,255,0.4); font-size: 12px;">No se encontraron artículos</div>`;
-            }
-        };
+    if (filtered.length > 0) {
+        resultsContainer.style.display = 'block';
+        resultsContainer.innerHTML = filtered.map(p => {
+            const targetCat = p.categoria || p.grupo || 'Guitarras-Eléctricas';
+            const targetGrupo = p.grupo ? `&grupo=${encodeURIComponent(p.grupo)}` : '';
+            // PASAMOS TANTO EL ID ÚNICO COMO EL NOMBRE EXACTO
+            return `
+                <a href="categoria.html?cat=${encodeURIComponent(targetCat)}${targetGrupo}&selectId=${p.id}&select=${encodeURIComponent(p.name)}" class="search-result-item">
+                    <img src="${p.image || 'rplogo.png'}" alt="${p.name}">
+                    <div class="search-result-info">
+                        <h4>${p.name}</h4>
+                        <span>${(p.categoria || p.grupo || '').replace(/-/g, ' ')} • Q${p.price || '0'}</span>
+                    </div>
+                </a>
+            `;
+        }).join('');
+    } else {
+        resultsContainer.style.display = 'block';
+        resultsContainer.innerHTML = `<div style="padding: 15px; text-align: center; color: rgba(255,255,255,0.4); font-size: 12px;">No se encontraron artículos</div>`;
+    }
+};
 
         inicializarBuscadorGlobal();
     </script>
