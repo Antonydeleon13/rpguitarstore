@@ -433,6 +433,81 @@
     transform: scale(1.03);
     transition: all 0.5s ease;
 }
+
+
+/* CONTAINER DE IMAGEN CON FLECHAS FLOTANTES */
+.product-card-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/5;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.product-card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin-bottom: 0 !important;
+}
+
+/* FLECHAS DE NAVEGACIÓN DENTRO DE LA CARD */
+.card-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.65);
+    color: #c5a880;
+    border: 1px solid rgba(197, 168, 128, 0.4);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    opacity: 0.2;
+    transition: all 0.3s ease;
+    z-index: 5;
+}
+
+.product-card-img-wrapper:hover .card-nav-btn {
+    opacity: 1;
+}
+
+.card-nav-btn:hover {
+    background: #c5a880;
+    color: #000;
+}
+
+.card-nav-btn.prev { left: 5px; }
+.card-nav-btn.next { right: 5px; }
+
+/* PUNTOS INDICADORES DE FOTO (DOTS) */
+.card-dots {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    z-index: 5;
+}
+
+.card-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: background 0.3s;
+}
+
+.card-dot.active {
+    background: #c5a880;
+}
+
     </style>
 </head>
 <body>
@@ -813,9 +888,24 @@ function renderizarProductos(productos) {
     const grid = document.getElementById('product-grid');
     grid.innerHTML = productos.length > 0 ? productos.map(data => {
         const isAgotado = (parseInt(data.stock) || 0) === 0;
+
+        // Manejo de fotos: si existe data.images usa ese arreglo, si no, usa la foto única data.image
+        const fotos = (data.images && data.images.length > 0) ? data.images : [data.image];
+        const tieneVariasFotos = fotos.length > 1;
+
         return `
         <div class="product-card" data-id="${data.id}">
-            <img src="${data.image}">
+            <div class="product-card-img-wrapper" id="wrapper-${data.id}" data-index="0" data-images='${JSON.stringify(fotos).replace(/'/g, "&apos;")}'>
+                ${tieneVariasFotos ? `<button class="card-nav-btn prev" onclick="prevNextImage('${data.id}', -1, event)"><i class="fas fa-chevron-left"></i></button>` : ''}
+                <img id="img-${data.id}" src="${fotos[0]}">
+                ${tieneVariasFotos ? `<button class="card-nav-btn next" onclick="prevNextImage('${data.id}', 1, event)"><i class="fas fa-chevron-right"></i></button>` : ''}
+                ${tieneVariasFotos ? `
+                    <div class="card-dots" id="dots-${data.id}">
+                        ${fotos.map((_, i) => `<span class="card-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                    </div>
+                ` : ''}
+            </div>
+
             <h3>${data.name}</h3>
             <p style="color: rgba(255,255,255,0.5); font-size: 13px; line-height: 1.6; text-align: justify; margin: 10px 0;">
                 ${data.desc || ''}
@@ -862,6 +952,33 @@ function renderizarProductos(productos) {
         }, 300);
     }
 }
+
+// FUNCIÓN PARA CAMBIAR DE IMAGEN EN LA MISMA CARD
+window.prevNextImage = (id, direction, event) => {
+    event.stopPropagation();
+    const wrapper = document.getElementById(`wrapper-${id}`);
+    const img = document.getElementById(`img-${id}`);
+    const dotsContainer = document.getElementById(`dots-${id}`);
+    
+    if (!wrapper || !img) return;
+
+    const images = JSON.parse(wrapper.getAttribute('data-images'));
+    let currentIndex = parseInt(wrapper.getAttribute('data-index')) || 0;
+
+    currentIndex += direction;
+    if (currentIndex < 0) currentIndex = images.length - 1;
+    if (currentIndex >= images.length) currentIndex = 0;
+
+    wrapper.setAttribute('data-index', currentIndex);
+    img.src = images[currentIndex];
+
+    if (dotsContainer) {
+        const dots = dotsContainer.querySelectorAll('.card-dot');
+        dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === currentIndex);
+        });
+    }
+};
 
 iniciarPagina();
 </script>
