@@ -78,7 +78,7 @@
 </select>
         
         <textarea id="desc" rows="3" placeholder="Descripción"></textarea>
-        <input type="file" id="fileInput">
+        <input type="file" id="fileInput" multiple>
         <button id="save-btn">Subir a la Tienda</button>
         <button id="cancel-edit" style="display:none; background:#800; margin-top:10px; color:white;">Cancelar Edición</button>
     </div>
@@ -168,47 +168,66 @@ cargarCategoriasAdmin();
     };
 
     document.getElementById('save-btn').onclick = async () => {
-        const id = document.getElementById('edit-id').value;
-        const name = document.getElementById('name').value;
-        const price = document.getElementById('price').value;
-        const stock = document.getElementById('stock').value;
-        const desc = document.getElementById('desc').value;
-        
-        const select = document.getElementById('categoria');
-        const inputManual = document.getElementById('nueva-categoria');
-        const grupoSelector = document.getElementById('nuevo-grupo');
-        
-        const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
-        const grupo = grupoSelector.value;
-        const file = document.getElementById('fileInput').files[0];
+    const id = document.getElementById('edit-id').value;
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const stock = document.getElementById('stock').value;
+    const desc = document.getElementById('desc').value;
+    
+    const select = document.getElementById('categoria');
+    const inputManual = document.getElementById('nueva-categoria');
+    const grupoSelector = document.getElementById('nuevo-grupo');
+    
+    const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
+    const grupo = grupoSelector.value;
+    
+    // Convertimos FileList a un Array con todas las imágenes seleccionadas
+    const files = Array.from(document.getElementById('fileInput').files);
 
-        if (id) {
-            Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            
-            // Objeto de datos a actualizar
-            let datosActualizados = { name, price, stock, categoria, grupo, desc };
+    if (id) {
+        Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        
+        let datosActualizados = { name, price, stock, categoria, grupo, desc };
 
-            // SI EL USUARIO ELIGIÓ UNA NUEVA IMAGEN AL EDITAR, LA SUBIMOS A STORAGE
-            if (file) {
+        // SI EL USUARIO ELIGIÓ NUEVAS IMÁGENES AL EDITAR
+        if (files.length > 0) {
+            let nuevasFotos = [];
+            for (const file of files) {
                 const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
                 await uploadBytes(storageRef, file);
-                const nuevaImagenUrl = await getDownloadURL(storageRef);
-                datosActualizados.image = nuevaImagenUrl; // Agregamos la nueva URL
+                const url = await getDownloadURL(storageRef);
+                nuevasFotos.push(url);
             }
+            datosActualizados.images = nuevasFotos;
+            datosActualizados.image = nuevasFotos[0]; // Foto principal por defecto
+        }
 
-            await updateDoc(doc(db, "productos", id), datosActualizados);
-            Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-        } else {
-            if (!file) return Swal.fire("Error", "Elige una imagen", "error");
-            Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        await updateDoc(doc(db, "productos", id), datosActualizados);
+        Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+    } else {
+        if (files.length === 0) return Swal.fire("Error", "Elige al menos una imagen", "error");
+        
+        Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        
+        let listaFotos = [];
+        for (const file of files) {
             const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
             await uploadBytes(storageRef, file);
-            const image = await getDownloadURL(storageRef);
-            await addDoc(collection(db, "productos"), { name, price, stock, categoria, grupo, desc, image, timestamp: Date.now() });
-            Swal.fire({ icon: 'success', title: 'Producto subido', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+            const url = await getDownloadURL(storageRef);
+            listaFotos.push(url);
         }
-        location.reload();
-    };
+
+        await addDoc(collection(db, "productos"), { 
+            name, price, stock, categoria, grupo, desc, 
+            image: listaFotos[0],  // Foto principal
+            images: listaFotos,    // Arreglo con todas las fotos
+            timestamp: Date.now() 
+        });
+        
+        Swal.fire({ icon: 'success', title: 'Producto subido', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+    }
+    location.reload();
+};
 
     // INVENTARIO
     const list = document.getElementById('inventory-list');
