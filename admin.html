@@ -38,6 +38,61 @@
         .btn-delete-pedido:hover {
             color: #e74c3c;
         }
+
+        /* ESTILOS DEL ACORDEÓN DE INVENTARIO */
+        .brand-accordion {
+            margin-bottom: 12px;
+            border: 1px solid rgba(197, 168, 128, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            background: #141414;
+        }
+
+        .brand-accordion-header {
+            background: #222;
+            padding: 14px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #c5a880;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .brand-accordion-header:hover {
+            background: #2a2a2a;
+        }
+
+        .brand-accordion-header i {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .brand-accordion-header.active i {
+            transform: rotate(180deg);
+        }
+
+        .brand-accordion-body {
+            display: none;
+            background: #181818;
+        }
+
+        .brand-accordion-body.active {
+            display: block;
+        }
+
+        .brand-count-badge {
+            background: rgba(197, 168, 128, 0.15);
+            color: #ffffff;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -64,18 +119,18 @@
 
         <input type="text" id="nueva-categoria" placeholder="Escribe el nombre de la nueva marca..." style="display: none;">
 
-       <label id="label-grupo" style="display: block; margin-top: 15px; color: #c5a880; font-size: 11px; text-transform: uppercase;">Grupo (¿Dónde clasificar esta marca?):</label>
-<select id="nuevo-grupo" style="width: 100%; padding: 12px 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white;">
-    <option value="Guitarras-Eléctricas">Guitarras Eléctricas</option>
-    <option value="Guitarras-Acústicas">Guitarras Acústicas</option>
-    <option value="Electro-Acústicas">Electro Acústicas</option>
-    <option value="Bajos">Bajos</option>
-    <option value="Ukeleles">Ukeleles</option>
-    <option value="Amplificadores">Amplificadores</option>
-    <option value="Pedales">Pedales</option>
-    <option value="Accesorios">Accesorios</option>
-    <option value="Lauten-Audio">Micrófonos</option>
-</select>
+        <label id="label-grupo" style="display: block; margin-top: 15px; color: #c5a880; font-size: 11px; text-transform: uppercase;">Grupo (¿Dónde clasificar esta marca?):</label>
+        <select id="nuevo-grupo" style="width: 100%; padding: 12px 20px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white;">
+            <option value="Guitarras-Eléctricas">Guitarras Eléctricas</option>
+            <option value="Guitarras-Acústicas">Guitarras Acústicas</option>
+            <option value="Electro-Acústicas">Electro Acústicas</option>
+            <option value="Bajos">Bajos</option>
+            <option value="Ukeleles">Ukeleles</option>
+            <option value="Amplificadores">Amplificadores</option>
+            <option value="Pedales">Pedales</option>
+            <option value="Accesorios">Accesorios</option>
+            <option value="Lauten-Audio">Micrófonos</option>
+        </select>
         
         <textarea id="desc" rows="3" placeholder="Descripción"></textarea>
         <input type="file" id="fileInput" multiple>
@@ -105,40 +160,36 @@
     const storage = getStorage(app);
 
     async function cargarCategoriasAdmin() {
-    const select = document.getElementById('categoria');
-    const snapshot = await getDocs(collection(db, "productos"));
-    const categorias = new Set();
-    
-    snapshot.forEach(doc => { 
-        if(doc.data().categoria) categorias.add(doc.data().categoria); 
-    });
+        const select = document.getElementById('categoria');
+        const snapshot = await getDocs(collection(db, "productos"));
+        const categorias = new Set();
+        
+        snapshot.forEach(doc => { 
+            if(doc.data().categoria) categorias.add(doc.data().categoria); 
+        });
 
-    // Limpiamos el select
-    select.innerHTML = '';
+        select.innerHTML = '';
 
-    // 1. Opción inicial en gris que no se puede volver a seleccionar
-    const optionDefault = document.createElement('option');
-    optionDefault.value = "";
-    optionDefault.text = "Selecciona una opción";
-    optionDefault.disabled = true;
-    optionDefault.selected = true;
-    select.add(optionDefault);
+        const optionDefault = document.createElement('option');
+        optionDefault.value = "";
+        optionDefault.text = "Selecciona una opción";
+        optionDefault.disabled = true;
+        optionDefault.selected = true;
+        select.add(optionDefault);
 
-    // 2. Cargamos las marcas reales de Firestore
-    categorias.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.text = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
-        select.add(option);
-    });
+        categorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.text = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/-/g, ' ');
+            select.add(option);
+        });
 
-    // 3. Opción manual SIEMPRE al final
-    const optionOtra = document.createElement('option');
-    optionOtra.value = "otra";
-    optionOtra.text = "Otra marca *Ingresar manualmente*";
-    select.add(optionOtra);
-}
-cargarCategoriasAdmin();
+        const optionOtra = document.createElement('option');
+        optionOtra.value = "otra";
+        optionOtra.text = "Otra marca *Ingresar manualmente*";
+        select.add(optionOtra);
+    }
+    cargarCategoriasAdmin();
 
     window.showTab = (tabId) => {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -148,12 +199,154 @@ cargarCategoriasAdmin();
         if(activeBtn) activeBtn.classList.add('active');
     };
 
+    window.toggleBrandAccordion = (brandHeader) => {
+        brandHeader.classList.toggle('active');
+        const body = brandHeader.nextElementSibling;
+        if (body) {
+            body.classList.toggle('active');
+        }
+    };
+
     window.filterInventory = () => {
-        const val = document.getElementById('search-bar').value.toLowerCase();
-        document.querySelectorAll('.inventory-item').forEach(item => {
-            item.style.display = item.innerText.toLowerCase().includes(val) ? 'flex' : 'none';
+        const val = document.getElementById('search-bar').value.toLowerCase().trim();
+        const accordions = document.querySelectorAll('.brand-accordion');
+
+        accordions.forEach(acc => {
+            const items = acc.querySelectorAll('.inventory-item');
+            let hasMatch = false;
+
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(val)) {
+                    item.style.display = 'flex';
+                    hasMatch = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const header = acc.querySelector('.brand-accordion-header');
+            const body = acc.querySelector('.brand-accordion-body');
+
+            if (val.length > 0) {
+                if (hasMatch) {
+                    acc.style.display = 'block';
+                    header.classList.add('active');
+                    body.classList.add('active');
+                } else {
+                    acc.style.display = 'none';
+                }
+            } else {
+                acc.style.display = 'block';
+                header.classList.remove('active');
+                body.classList.remove('active');
+            }
         });
     };
+
+    async function cargarInventarioAcordeon() {
+        const list = document.getElementById('inventory-list');
+        list.innerHTML = `<p style="text-align:center; color:#888;">Cargando inventario...</p>`;
+
+        const snapshot = await getDocs(collection(db, "productos"));
+        if (snapshot.empty) {
+            list.innerHTML = `<p style="text-align:center; color:#888;">No hay productos registrados.</p>`;
+            return;
+        }
+
+        const productosPorMarca = new Map();
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const marca = (data.categoria || 'General').toLowerCase().replace(/-/g, ' ');
+            
+            if (!productosPorMarca.has(marca)) {
+                productosPorMarca.set(marca, []);
+            }
+            productosPorMarca.get(marca).push({ id: docSnap.id, ...data });
+        });
+
+        const marcasOrdenadas = Array.from(productosPorMarca.keys()).sort();
+        list.innerHTML = '';
+
+        marcasOrdenadas.forEach(marcaKey => {
+            const prods = productosPorMarca.get(marcaKey);
+            const nombreMarcaNombre = marcaKey.toUpperCase();
+
+            const accordionDiv = document.createElement('div');
+            accordionDiv.className = 'brand-accordion';
+
+            accordionDiv.innerHTML = `
+                <div class="brand-accordion-header" onclick="toggleBrandAccordion(this)">
+                    <span>
+                        <i class="fas fa-layer-group" style="margin-right: 8px;"></i>
+                        ${nombreMarcaNombre}
+                        <span class="brand-count-badge">${prods.length} ${prods.length === 1 ? 'producto' : 'productos'}</span>
+                    </span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="brand-accordion-body"></div>
+            `;
+
+            const bodyDiv = accordionDiv.querySelector('.brand-accordion-body');
+
+            prods.forEach(data => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+                itemDiv.innerHTML = `
+                    <img src="${data.image || (data.images ? data.images[0] : '')}" style="width: 70px; height: 70px; object-fit: contain; background: #000; border-radius: 4px;">
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong style="color: #fff; font-size: 14px;">${data.name}</strong>
+                            <div>
+                                <i class="fas fa-pencil-alt" id="edit-${data.id}" style="cursor: pointer; color: #c5a880; margin-right: 15px;" title="Editar"></i>
+                                <i class="fas fa-times" id="del-${data.id}" style="cursor: pointer; color: #800;" title="Eliminar"></i>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.85em; color: #aaa; margin-top: 5px;">
+                            Grupo: <span style="color:#c5a880;">${data.grupo || 'N/A'}</span> | Stock: <strong>${data.stock || 0}</strong> | Q${data.price}
+                        </div>
+                    </div>`;
+
+                bodyDiv.appendChild(itemDiv);
+
+                itemDiv.querySelector(`#edit-${data.id}`).onclick = () => {
+                    document.getElementById('edit-id').value = data.id;
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('price').value = data.price;
+                    document.getElementById('stock').value = data.stock || 0;
+                    document.getElementById('categoria').value = data.categoria;
+                    document.getElementById('desc').value = data.desc || '';
+                    document.getElementById('save-btn').innerText = "Actualizar Producto";
+                    document.getElementById('cancel-edit').style.display = "block";
+                    window.showTab('subir');
+
+                    if (data.grupo) {
+                        document.getElementById('nuevo-grupo').value = data.grupo;
+                    }
+                };
+
+                itemDiv.querySelector(`#del-${data.id}`).onclick = async () => {
+                    const res = await Swal.fire({
+                        title: '¿Eliminar producto?',
+                        text: "Esta acción no se puede deshacer.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#800'
+                    });
+                    if (res.isConfirmed) {
+                        await deleteDoc(doc(db, 'productos', data.id));
+                        cargarInventarioAcordeon();
+                        Swal.fire({ icon: 'success', title: 'Producto eliminado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+                    }
+                };
+            });
+
+            list.appendChild(accordionDiv);
+        });
+    }
+
+    cargarInventarioAcordeon();
 
     window.filterPedidos = () => {
         const val = document.getElementById('search-pedidos').value.toLowerCase();
@@ -168,109 +361,64 @@ cargarCategoriasAdmin();
     };
 
     document.getElementById('save-btn').onclick = async () => {
-    const id = document.getElementById('edit-id').value;
-    const name = document.getElementById('name').value;
-    const price = document.getElementById('price').value;
-    const stock = document.getElementById('stock').value;
-    const desc = document.getElementById('desc').value;
-    
-    const select = document.getElementById('categoria');
-    const inputManual = document.getElementById('nueva-categoria');
-    const grupoSelector = document.getElementById('nuevo-grupo');
-    
-    const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
-    const grupo = grupoSelector.value;
-    
-    // Convertimos FileList a un Array con todas las imágenes seleccionadas
-    const files = Array.from(document.getElementById('fileInput').files);
-
-    if (id) {
-        Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const id = document.getElementById('edit-id').value;
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const stock = document.getElementById('stock').value;
+        const desc = document.getElementById('desc').value;
         
-        let datosActualizados = { name, price, stock, categoria, grupo, desc };
+        const select = document.getElementById('categoria');
+        const inputManual = document.getElementById('nueva-categoria');
+        const grupoSelector = document.getElementById('nuevo-grupo');
+        
+        const categoria = (select.value === 'otra') ? inputManual.value.toLowerCase().replace(/\s+/g, '-') : select.value;
+        const grupo = grupoSelector.value;
+        const files = Array.from(document.getElementById('fileInput').files);
 
-        // SI EL USUARIO ELIGIÓ NUEVAS IMÁGENES AL EDITAR
-        if (files.length > 0) {
-            let nuevasFotos = [];
+        if (id) {
+            Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            let datosActualizados = { name, price, stock, categoria, grupo, desc };
+
+            if (files.length > 0) {
+                let nuevasFotos = [];
+                for (const file of files) {
+                    const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
+                    await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(storageRef);
+                    nuevasFotos.push(url);
+                }
+                datosActualizados.images = nuevasFotos;
+                datosActualizados.image = nuevasFotos[0];
+            }
+
+            await updateDoc(doc(db, "productos", id), datosActualizados);
+            Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
+        } else {
+            if (files.length === 0) return Swal.fire("Error", "Elige al menos una imagen", "error");
+            
+            Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            let listaFotos = [];
             for (const file of files) {
                 const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
                 await uploadBytes(storageRef, file);
                 const url = await getDownloadURL(storageRef);
-                nuevasFotos.push(url);
+                listaFotos.push(url);
             }
-            datosActualizados.images = nuevasFotos;
-            datosActualizados.image = nuevasFotos[0]; // Foto principal por defecto
+
+            await addDoc(collection(db, "productos"), { 
+                name, price, stock, categoria, grupo, desc, 
+                image: listaFotos[0],
+                images: listaFotos,
+                timestamp: Date.now() 
+            });
+            
+            Swal.fire({ icon: 'success', title: 'Producto subido', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
         }
+        location.reload();
+    };
 
-        await updateDoc(doc(db, "productos", id), datosActualizados);
-        Swal.fire({ icon: 'success', title: 'Producto actualizado', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-    } else {
-        if (files.length === 0) return Swal.fire("Error", "Elige al menos una imagen", "error");
-        
-        Swal.fire({ title: 'Subiendo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-        
-        let listaFotos = [];
-        for (const file of files) {
-            const storageRef = ref(storage, 'productos/' + Date.now() + '_' + file.name);
-            await uploadBytes(storageRef, file);
-            const url = await getDownloadURL(storageRef);
-            listaFotos.push(url);
-        }
-
-        await addDoc(collection(db, "productos"), { 
-            name, price, stock, categoria, grupo, desc, 
-            image: listaFotos[0],  // Foto principal
-            images: listaFotos,    // Arreglo con todas las fotos
-            timestamp: Date.now() 
-        });
-        
-        Swal.fire({ icon: 'success', title: 'Producto subido', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-    }
-    location.reload();
-};
-
-    // INVENTARIO
-    const list = document.getElementById('inventory-list');
-    const snapshot = await getDocs(collection(db, "productos"));
-    snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'inventory-item';
-        itemDiv.innerHTML = `<img src="${data.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
-            <div style="flex-grow: 1;">
-                <div style="display: flex; justify-content: space-between;"><strong>${data.name}</strong>
-                    <div>
-                        <i class="fas fa-pencil-alt" id="edit-${docSnap.id}" style="cursor: pointer; color: #c5a880; margin-right: 15px;"></i>
-                        <i class="fas fa-times" id="del-${docSnap.id}" style="cursor: pointer; color: #800;"></i>
-                    </div>
-                </div>
-                <div style="font-size: 0.85em; color: #888;">Cat: ${data.categoria} | Gp: ${data.grupo || 'N/A'} | Q${data.price}</div>
-            </div>`;
-        list.appendChild(itemDiv);
-
-        itemDiv.querySelector(`#edit-${docSnap.id}`).onclick = () => {
-            document.getElementById('edit-id').value = docSnap.id;
-            document.getElementById('name').value = data.name;
-            document.getElementById('price').value = data.price;
-            document.getElementById('stock').value = data.stock || 0;
-            document.getElementById('categoria').value = data.categoria;
-            document.getElementById('desc').value = data.desc;
-            document.getElementById('save-btn').innerText = "Actualizar Producto";
-            document.getElementById('cancel-edit').style.display = "block";
-            window.showTab('subir');
-
-            document.getElementById('nuevo-grupo').value = data.grupo;
-            document.getElementById('nuevo-grupo').style.display = 'block';
-            document.getElementById('label-grupo').style.display = 'block';
-        };
-
-        itemDiv.querySelector(`#del-${docSnap.id}`).onclick = async () => {
-            const res = await Swal.fire({ title: '¿Eliminar producto?', text: "Esta acción no se puede deshacer.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#800' });
-            if (res.isConfirmed) { await deleteDoc(doc(db, 'productos', docSnap.id)); location.reload(); }
-        };
-    });
-
-    // CARGAR Y GESTIONAR BITÁCORA DE PEDIDOS CON X PARA ELIMINAR
     async function cargarPedidos() {
         const container = document.getElementById('pedidos-list');
         const snap = await getDocs(collection(db, "pedidos"));
@@ -280,7 +428,6 @@ cargarCategoriasAdmin();
             return;
         }
 
-        // Ordenamos los pedidos por fecha más reciente primero
         const listaPedidos = snap.docs.map(d => ({ id: d.id, ...d.data() }))
             .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
@@ -318,7 +465,6 @@ cargarCategoriasAdmin();
         });
         container.innerHTML = html;
 
-        // ASIGNAR EVENTOS DE ELIMINACIÓN A LA X DE CADA PEDIDO
         listaPedidos.forEach(ped => {
             const btnDelete = document.getElementById(`del-ped-${ped.id}`);
             if (btnDelete) {
@@ -346,7 +492,6 @@ cargarCategoriasAdmin();
 
     cargarPedidos();
 
-    // DETECTAR SI SE ABRE UN PEDIDO ESPECÍFICO DESDE EL LINK DE WHATSAPP (#pedido-ID)
     window.addEventListener('load', async () => {
         const hash = window.location.hash;
         if (hash && hash.startsWith('#pedido-')) {
